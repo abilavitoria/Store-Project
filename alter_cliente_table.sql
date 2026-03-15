@@ -1,0 +1,6 @@
+
+ALTER TABLE comercial.clientes
+ADD COLUMN cpf VARCHAR(11) UNIQUE NOT NULL
+
+ALTER TABLE comercial.clientes
+ADD COLUMN cnpj VARCHAR(14) UNIQUE NOT NULL
