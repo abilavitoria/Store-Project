@@ -19,8 +19,10 @@ public class Clientes {
     private Integer id;
     @Column(length = 100, nullable = false)
     private String nome;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String email;
+    @Column(length = 13)
+    private String telefone;
     @Column(length = 11, nullable = false)
     private String cpf;
     @Column(length = 14, nullable = false)
