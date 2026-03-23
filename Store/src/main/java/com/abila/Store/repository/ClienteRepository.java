@@ -1,4 +1,7 @@
 package com.abila.Store.repository;
 
-public interface ClienteRepository {
+import com.abila.Store.domain.Clientes;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClienteRepository extends JpaRepository<Clientes, Integer> {
 }

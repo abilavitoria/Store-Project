@@ -1,4 +1,7 @@
 package com.abila.Store.repository;
 
-public interface ProdutosRepository {
+import com.abila.Store.domain.Produtos;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProdutosRepository extends JpaRepository<Produtos, Integer> {
 }
