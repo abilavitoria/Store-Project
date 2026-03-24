@@ -20,10 +20,10 @@ public class Produtos {
     private String id;
     @Column(length = 100, nullable = false)
     private String nome;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String descricao;
     @Column(nullable = false)
-    private Float preco;
+    private Double preco;
     @Column(nullable = false)
     private Integer quantidade;
 }

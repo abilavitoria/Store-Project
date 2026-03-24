@@ -1,23 +1,23 @@
-package com.abila.Store.controller;
+package com.abila.Store.service;
 
 import com.abila.Store.domain.Clientes;
+import com.abila.Store.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
 
-@RestController
-@RequestMapping("/clientes")
-public class ClientesController {
-    private final ClientesController clientesController;
+@Service
+public class ClienteService {
+    private final ClienteRepository clienteRepo;
+
     //consultar
-    @GetMapping
-    public ResponseEntity<Clientes> findClienteById(@PathVariable Integer id){
-        Clientes 
-        return ResponseEntity.status(201).body()
+    public Optional<Clientes> findById(@PathVariable Integer id){
+        return clienteRepo.findById(id);
     }
     //salvar
     public Clientes save(@RequestBody Clientes clientes){
