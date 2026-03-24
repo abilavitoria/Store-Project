@@ -1,35 +1,51 @@
-package com.abila.Store.service;
+package com.abila.Store.Service;
 
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
-
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
     private final ClienteRepository clienteRepo;
 
+    //listar todos
+    public List<Clientes> findAll(){
+        return clienteRepo.findAll();
+    }
+
     //consultar
-    public Optional<Clientes> findById(@PathVariable Integer id){
+    public Optional<Clientes> findById(Integer id){
         return clienteRepo.findById(id);
     }
-    //salvar
-    public Clientes save(@RequestBody Clientes clientes){
+
+    //cadastrar
+    public Clientes saveClientes(Clientes clientes){
         return clienteRepo.save(clientes);
     }
+
     //excluir
-    public void delete(@PathVariable Integer id){
-        clienteRepo.deleteById(id);
+    public void deleteClientes(Integer id){
+        if(!clienteRepo.existsById(id)){
+            throw new RuntimeException("Cliente não encontrado");
+        }
+        else{clienteRepo.deleteById(id);}
     }
+
     //editar
-    public Clientes update(@PathVariable Integer id, @RequestBody Clientes clientes){
-        clientes.setId(id);
-        return clienteRepo.save(clientes);
+    public Clientes updateClientes(Clientes clientes, Integer id){
+       return clienteRepo.findById(id)
+               .map(existingClientes -> {
+                    clientes.setId(id);
+                    return clienteRepo.save(clientes);
+               })
+               .orElseThrow(()-> new RuntimeException("Cliente com id" + id + "não encontrado"));
     }
+
 }
