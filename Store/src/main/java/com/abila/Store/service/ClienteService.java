@@ -1,5 +1,4 @@
 package com.abila.Store.Service;
-
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClienteService {
     private final ClienteRepository clienteRepo;
-
-    //listar todos
-    public List<Clientes> findAll(){
-        return clienteRepo.findAll();
-    }
 
     //consultar
     public Optional<Clientes> findById(Integer id){
