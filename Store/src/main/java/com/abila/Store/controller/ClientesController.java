@@ -1,6 +1,6 @@
 package com.abila.Store.controller;
 
-import com.abila.Store.Service.ClienteService;
+import com.abila.Store.service.ClienteService;
 import com.abila.Store.domain.Clientes;
 
 import lombok.RequiredArgsConstructor;
