@@ -25,19 +25,19 @@ public class ProdutosController {
     //cadastrar
     @PostMapping
     public ResponseEntity<Produtos> save(@RequestBody Produtos produtos){
-        Produtos novoProduto = produtoService.save(produtos);
+        Produtos novoProduto = produtoService.saveProdutos(produtos);
         return ResponseEntity.status(201).body(novoProduto);
     }
     //excluir
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
-        produtoService.delete(id);
+        produtoService.deleteProdutos(id);
         return ResponseEntity.noContent().build();
     }
 
     //editar
     @PutMapping("/{id}")
     public ResponseEntity<Produtos> update(@PathVariable Integer id, @RequestBody Produtos produtos){
-        return ResponseEntity.ok(produtoService.update(id, produtos));
+        return ResponseEntity.ok(produtoService.updateProdutos(id, produtos));
     }
 }
