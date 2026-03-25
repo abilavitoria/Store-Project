@@ -1,6 +1,6 @@
 package com.abila.Store.controller;
 
-import com.abila.Store.Service.VendasService;
+import com.abila.Store.service.VendasService;
 import com.abila.Store.domain.Vendas;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,9 @@ public class VendasController {
         return ResponseEntity.noContent().build();
     }
     //editar
-    
+    public ResponseEntity<Vendas> update(@RequestBody Vendas vendas, @PathVariable Integer id){
+        return ResponseEntity.ok(vendasService.updateVendas(vendas, id));
+    }
 
     //adicionar itens
     //remover itens

@@ -1,6 +1,6 @@
 package com.abila.Store.controller;
 
-import com.abila.Store.Service.ProdutoService;
+import com.abila.Store.service.ProdutoService;
 import com.abila.Store.domain.Produtos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
