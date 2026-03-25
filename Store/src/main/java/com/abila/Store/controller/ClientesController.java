@@ -1,5 +1,6 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.Service.ClienteService;
 import com.abila.Store.domain.Clientes;
 
 import lombok.RequiredArgsConstructor;
@@ -13,27 +14,29 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/clientes")
 public class ClientesController {
-
-    private final com.abila.Store.Service.ClienteService clienteService;
+    private final ClienteService clienteService;
     //consultar
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Clientes>> findClienteById(@PathVariable Integer id){
-        return ResponseEntity.ok(clienteService.findById(id));
+    public ResponseEntity<Clientes> findClienteById(@PathVariable Integer id){
+        return clienteService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     //salvar
     @PostMapping
     public ResponseEntity<Clientes> save(@RequestBody Clientes clientes){
-        return ResponseEntity.status(201).build();
+        Clientes novoCliente = clienteService.saveClientes(clientes);
+        return ResponseEntity.status(201).body(novoCliente);
     }
     //excluir
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
         clienteService.deleteClientes(id);
+        return ResponseEntity.noContent().build();
     }
     //editar
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<Clientes> update(@PathVariable Integer id, @RequestBody Clientes clientes) {
-        clientes.setId(id);
         return ResponseEntity.ok(clienteService.updateClientes(clientes, id));
     }
 }
