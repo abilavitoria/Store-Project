@@ -1,4 +1,4 @@
-package com.abila.Store.Service;
+package com.abila.Store.service;
 
 import com.abila.Store.domain.Vendas;
 import com.abila.Store.repository.VendasRepository;

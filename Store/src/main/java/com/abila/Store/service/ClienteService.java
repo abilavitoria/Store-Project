@@ -1,4 +1,4 @@
-package com.abila.Store.Service;
+package com.abila.Store.service;
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
