@@ -14,10 +14,6 @@ import java.util.Optional;
 public class ProdutoService {
     private final ProdutosRepository produtosRepo;
 
-    public List<Produtos> listAll(){
-        return produtosRepo.findAll();
-    }
-
     //consultar
     public Optional<Produtos> findById(Integer id){
         return produtosRepo.findById(id);
@@ -30,9 +26,22 @@ public class ProdutoService {
 
     //excluir
     public void delete(Integer id){
-        if (produtosRepo.existsById(id)) produtosRepo.deleteById(id);
+        if (!produtosRepo.existsById(id)){
+            throw new RuntimeException("Produto não encontrado");
+        }
+        else {
+            produtosRepo.deleteById(id);
+        }
     }
 
     //editar
+    public Produtos update(Integer id, Produtos produtos){
+        return produtosRepo.findById(id)
+                .map(existingProdutos ->{
+                    produtos.setId(id);
+                    return produtosRepo.save(produtos);
+                })
+                .orElseThrow(() -> new RuntimeException("Produto com id" + id + "não encontrado"));
+    }
 
 }
