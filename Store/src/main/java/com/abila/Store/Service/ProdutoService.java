@@ -20,12 +20,11 @@ public class ProdutoService {
     }
 
     //cadastrar
-    public Produtos save(Produtos produtos){
+    public Produtos saveProdutos(Produtos produtos){
         return produtosRepo.save(produtos);
     }
-
     //excluir
-    public void delete(Integer id){
+    public void deleteProdutos(Integer id){
         if (!produtosRepo.existsById(id)){
             throw new RuntimeException("Produto não encontrado");
         }
@@ -33,9 +32,8 @@ public class ProdutoService {
             produtosRepo.deleteById(id);
         }
     }
-
     //editar
-    public Produtos update(Integer id, Produtos produtos){
+    public Produtos updateProdutos(Integer id, Produtos produtos){
         return produtosRepo.findById(id)
                 .map(existingProdutos ->{
                     produtos.setId(id);
@@ -43,5 +41,4 @@ public class ProdutoService {
                 })
                 .orElseThrow(() -> new RuntimeException("Produto com id" + id + "não encontrado"));
     }
-
 }
