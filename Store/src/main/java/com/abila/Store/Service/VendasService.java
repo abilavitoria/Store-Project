@@ -1,7 +1,11 @@
 package com.abila.Store.service;
 
+import com.abila.Store.DTO.VendaRequestDTO;
+import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
+import com.abila.Store.repository.ItemVendasRepository;
 import com.abila.Store.repository.VendasRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +15,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VendasService {
     private final VendasRepository vendasRepo;
+    private final ItemVendasRepository itemVendasRepo;
 
+//                  METODOS DE VENDA
     //consultar
     public Optional<Vendas> findById(Integer id){
         return vendasRepo.findById(id);
@@ -39,7 +45,13 @@ public class VendasService {
                 .orElseThrow(() -> new RuntimeException("Venda com id" + id + "não encontrada"));
     }
 
+    //METODOS DE ITENS
+
     //adicionar itens
+    @Transactional
+    public ItemVendas
     //remover itens
+
     //editar itens
+
 }
