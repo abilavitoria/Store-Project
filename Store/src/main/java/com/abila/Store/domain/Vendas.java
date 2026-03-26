@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,4 +30,7 @@ public class Vendas {
     private Double precoTotal;
     @Column(nullable = false)
     private Date data;
+
+    @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemVendas> itens;
 }

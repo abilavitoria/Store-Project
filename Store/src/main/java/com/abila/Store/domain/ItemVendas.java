@@ -20,7 +20,7 @@ public class ItemVendas {
     @Column(length = 100, nullable = false)
     private String nome;
     @Column(nullable = false)
-    private Double precoUnitario;
+    private Float precoUnitario;
     @Column(nullable = false)
     private Integer quantidade;
 

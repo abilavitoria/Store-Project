@@ -27,12 +27,13 @@ public class VendasController {
         return ResponseEntity.status(201).body(novaVenda);
     }
     //excluir
-    @DeleteMapping("/{}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         vendasService.deleteVendas(id);
         return ResponseEntity.noContent().build();
     }
     //editar
+    @PutMapping("/{id}")
     public ResponseEntity<Vendas> update(@RequestBody Vendas vendas, @PathVariable Integer id){
         return ResponseEntity.ok(vendasService.updateVendas(vendas, id));
     }
