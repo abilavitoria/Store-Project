@@ -33,4 +33,7 @@ public class Vendas {
 
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendas> itens;
+
+    @OneToOne(mappedBy = "clientes")
+    private Clientes clientes;
 }
