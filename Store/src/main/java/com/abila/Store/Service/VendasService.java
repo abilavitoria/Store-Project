@@ -79,4 +79,13 @@ public class VendasService {
                 })
                 .orElseThrow(() -> new RuntimeException("Item não encontrado"));
     }
+
+    //FUNCOES
+    public void atualizarTotal(Vendas venda){
+        double novoTotal = venda.getItens().stream()
+                .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
+                .sum();
+        venda.setPrecoTotal(novoTotal);
+        vendasRepo.save(venda);
+    }
 }
