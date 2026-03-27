@@ -57,6 +57,6 @@ public class VendasController {
     @DeleteMapping("/iten/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Integer itemId){
         vendasService.removeItemVendas(itemId);
-        ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }
