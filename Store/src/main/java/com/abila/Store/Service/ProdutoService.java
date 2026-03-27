@@ -1,12 +1,10 @@
 package com.abila.Store.service;
 
-import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.Produtos;
 import com.abila.Store.repository.ProdutosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
