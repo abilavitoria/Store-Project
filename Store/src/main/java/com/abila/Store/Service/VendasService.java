@@ -1,6 +1,5 @@
 package com.abila.Store.service;
 
-import com.abila.Store.DTO.VendaRequestDTO;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
 import com.abila.Store.repository.ItemVendasRepository;
@@ -46,12 +45,38 @@ public class VendasService {
     }
 
     //METODOS DE ITENS
-
-    //adicionar itens
+    //adicionar itens a uma venda já existente
     @Transactional
-    public ItemVendas
+    public ItemVendas addItemVendas(Integer vendaId, ItemVendas novoItem){
+        return vendasRepo.findById(vendaId)
+                .map(venda ->{
+                    novoItem.setVendas(venda);
+                    return itemVendasRepo.save(novoItem);
+                })
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+    }
     //remover itens
+    @Transactional
+    public void removeItemVendas(Integer itemId){
+        if (!itemVendasRepo.existsById(itemId)){
+            throw new RuntimeException("Item não encontrado");
+        }
+        else{
+            itemVendasRepo.deleteById(itemId);
+        }
+    }
 
     //editar itens
+    @Transactional
+    public ItemVendas updateItemVendas(Integer itemId, ItemVendas itemAtualizado){
+        return itemVendasRepo.findById(itemId)
+                .map(itemExistente -> {
+                    itemExistente.setNome(itemAtualizado.getNome());
+                    itemExistente.setQuantidade(itemAtualizado.getQuantidade());
+                    itemExistente.setPrecoUnitario(itemAtualizado.getPrecoUnitario());
 
+                    return itemVendasRepo.save(itemExistente);
+                })
+                .orElseThrow(() -> new RuntimeException("Item não encontrado"));
+    }
 }

@@ -2,11 +2,8 @@ package com.abila.Store.service;
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

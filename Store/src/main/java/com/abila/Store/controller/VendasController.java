@@ -1,5 +1,6 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.service.VendasService;
 import com.abila.Store.domain.Vendas;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/vendas")
 public class VendasController {
     private final VendasService vendasService;
+
+    //                  METODOS DE VENDA
     //consultar
     @GetMapping("/{id}")
     public ResponseEntity<Vendas> findVendasById(@PathVariable Integer id){
@@ -38,7 +41,22 @@ public class VendasController {
         return ResponseEntity.ok(vendasService.updateVendas(vendas, id));
     }
 
+    //                  METODOS DE ITEM
     //adicionar itens
-    //remover itens
+    @PostMapping("/{vendaId}/itens")
+    public ResponseEntity<ItemVendas> addItem(@PathVariable Integer vendaId, @RequestBody ItemVendas item){
+        ItemVendas novoItem = vendasService.addItemVendas(vendaId, item);
+        return ResponseEntity.status(201).body(novoItem);
+    }
     //editar itens
+    @PutMapping("/itens/{itemId}")
+    public ResponseEntity<ItemVendas> updateItem(@PathVariable Integer itemId, @RequestBody ItemVendas item){
+        return ResponseEntity.ok(vendasService.updateItemVendas(itemId, item));
+    }
+    //delete itens
+    @DeleteMapping("/iten/{itemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Integer itemId){
+        vendasService.removeItemVendas(itemId);
+        ResponseEntity.noContent().build();
+    }
 }
