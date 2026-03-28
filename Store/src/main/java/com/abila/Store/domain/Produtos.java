@@ -26,4 +26,7 @@ public class Produtos {
     private Double preco;
     @Column(nullable = false)
     private Integer quantidade;
+
+    @OneToOne(mappedBy = "itemVendas")
+    private ItemVendas itemVendas;
 }

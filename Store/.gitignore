@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# PostgreSQL / Databases
+/pgdata/
+/*.db
+/*.sql_dump
+/target/
+.idea/

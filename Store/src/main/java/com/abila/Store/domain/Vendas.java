@@ -20,23 +20,17 @@ public class Vendas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
-    private Integer clienteId;
-    @Column(nullable = false)
-    private Integer produto_Id;
+    @OneToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Clientes clientes;
     @Column(length = 100)
     private String descricao;
     @Column(nullable = false)
-    private Double precoTotal;
+    private Double precoTotal = 0.00;
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date data;
 
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendas> itens;
-
-    @OneToOne(mappedBy = "clientes")
-    private Clientes clientes;
-
-    @OneToMany(mappedBy = "produtos")
-    private Produtos produtos;
 }
