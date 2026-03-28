@@ -1,9 +1,0 @@
-/*tabela vendas*/
-CREATE TABLE vendas.vendas(
-	id serial PRIMARY KEY,/*serial autoincr*/
-	cliente_id INT NOT NULL,
-	produto_id INT NOT NULL,
-	descricao_venda TEXT,
-	preco_total DECIMAL(10,2) NOT NULL,
-	data_venda TIMESTAMP DEFAULT CURRENT_TIMESTAMP/*dd/mm/aaaa/h:m:s*/
-);

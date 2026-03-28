@@ -36,4 +36,7 @@ public class Vendas {
 
     @OneToOne(mappedBy = "clientes")
     private Clientes clientes;
+
+    @OneToMany(mappedBy = "produtos")
+    private Produtos produtos;
 }
