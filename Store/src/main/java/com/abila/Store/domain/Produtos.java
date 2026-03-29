@@ -30,6 +30,6 @@ public class Produtos {
     @Column(nullable = false)
     private Integer quantidade;
 
-    @OneToMany(mappedBy = "produto")
-    private List<ItemVendas> itensVendidos;
+    @OneToOne(mappedBy = "produto")
+    private ItemVendas itensVendidos;
 }

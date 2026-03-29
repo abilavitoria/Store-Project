@@ -30,7 +30,7 @@ public class ItemVendas {
     @JoinColumn(name = "venda_id")
     private Vendas vendas;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "produto_id")
     private Produtos produto;
 }

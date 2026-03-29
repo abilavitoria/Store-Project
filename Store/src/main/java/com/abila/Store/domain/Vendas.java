@@ -30,7 +30,7 @@ public class Vendas {
     @Column(nullable = false)
     private LocalDateTime data = LocalDateTime.now();
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Clientes cliente;
 

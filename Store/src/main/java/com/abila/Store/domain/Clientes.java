@@ -30,6 +30,6 @@ public class Clientes {
     @Column(length = 14)
     private String cnpj;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Vendas> vendas;
+    @OneToOne(mappedBy = "cliente")
+    private Vendas vendas;
 }

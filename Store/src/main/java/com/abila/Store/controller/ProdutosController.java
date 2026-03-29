@@ -15,7 +15,6 @@ public class ProdutosController {
 
     //consultar
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Produtos> findProdutosById(@PathVariable Integer id){
         return produtoService.findById(id)
                 .map(ResponseEntity::ok)
@@ -23,13 +22,11 @@ public class ProdutosController {
     }
     //cadastrar
     @PostMapping
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Produtos> save(@RequestBody Produtos produtos){
         Produtos novoProduto = produtoService.saveProdutos(produtos);
         return ResponseEntity.status(201).body(novoProduto);
     }
     //excluir
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         produtoService.deleteProdutos(id);
@@ -38,7 +35,6 @@ public class ProdutosController {
 
     //editar
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<Produtos> update(@PathVariable Integer id, @RequestBody Produtos produtos){
         return ResponseEntity.ok(produtoService.updateProdutos(id, produtos));
     }
