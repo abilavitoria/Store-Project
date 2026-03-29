@@ -7,13 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 
 @Entity
-@Table
+@Table(name = "produtos")
 public class Produtos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +26,10 @@ public class Produtos {
     @Column(length = 100)
     private String descricao;
     @Column(nullable = false)
-    private Double preco;
+    private BigDecimal preco;
     @Column(nullable = false)
     private Integer quantidade;
 
-    @OneToOne(mappedBy = "itemVendas")
-    private ItemVendas itemVendas;
+    @OneToMany(mappedBy = "produto")
+    private List<ItemVendas> itensVendidos;
 }

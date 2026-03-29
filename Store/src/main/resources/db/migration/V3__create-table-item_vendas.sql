@@ -1,7 +1,7 @@
 CREATE TABLE item_vendas(
     id serial PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    precoUnitario DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    preco_unitario DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     quantidade INTEGER NOT NULL,
     venda_id INTEGER NOT NULL,
     produto_id INTEGER NOT NULL,

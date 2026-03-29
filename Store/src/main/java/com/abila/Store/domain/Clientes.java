@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 
 @Entity
-@Table
+@Table(name = "clientes")
 public class Clientes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +25,11 @@ public class Clientes {
     private String email;
     @Column(length = 13)
     private String telefone;
-    @Column(length = 11, nullable = false)
+    @Column(length = 11)
     private String cpf;
-    @Column(length = 14, nullable = false)
+    @Column(length = 14)
     private String cnpj;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Vendas> vendas;
 }

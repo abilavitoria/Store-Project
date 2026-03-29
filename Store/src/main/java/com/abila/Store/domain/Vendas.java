@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,22 +18,22 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table
+@Table(name = "vendas")
 public class Vendas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Clientes clientes;
     @Column(length = 100)
     private String descricao;
     @Column(nullable = false)
-    private Double precoTotal = 0.00;
+    private BigDecimal precoTotal;
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date data;
+    private LocalDateTime data = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Clientes cliente;
 
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemVendas> itens;
+    private List<ItemVendas> itens = new ArrayList<>();
 }

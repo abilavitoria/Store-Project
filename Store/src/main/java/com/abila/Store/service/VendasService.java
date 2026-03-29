@@ -7,6 +7,8 @@ import com.abila.Store.repository.VendasRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 import java.util.Optional;
 
@@ -81,11 +83,5 @@ public class VendasService {
     }
 
     //FUNCOES
-    public void atualizarTotal(Vendas venda){
-        double novoTotal = venda.getItens().stream()
-                .mapToDouble(item -> item.getPrecoUnitario() * item.getQuantidade())
-                .sum();
-        venda.setPrecoTotal(novoTotal);
-        vendasRepo.save(venda);
-    }
+
 }

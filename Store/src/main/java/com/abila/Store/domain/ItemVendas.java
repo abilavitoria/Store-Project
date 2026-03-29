@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
 @Entity
-@Table
+@Table(name = "item_vendas")
 public class ItemVendas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +22,15 @@ public class ItemVendas {
     @Column(length = 100, nullable = false)
     private String nome;
     @Column(nullable = false)
-    private Float precoUnitario;
+    private BigDecimal precoUnitario;
     @Column(nullable = false)
     private Integer quantidade;
 
     @ManyToOne
     @JoinColumn(name = "venda_id")
     private Vendas vendas;
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id")
+    private Produtos produto;
 }
