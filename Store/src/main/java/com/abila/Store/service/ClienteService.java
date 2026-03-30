@@ -85,4 +85,45 @@ public class ClienteService {
          }
     }
 
+    public boolean validacaoCnpj(String cnpj){
+        cnpj = cnpj.replaceAll("\\D", "");
+
+        if(cnpj.length() != 14 || cnpj.matches("(\\d)\\1{13}")) return false;
+
+        int[] numeros = new int[14];
+        for(int i = 0; i < 14; i++){
+            numeros[i] = Character.getNumericValue(cnpj.charAt(13 - i));
+        }
+
+        //VERIFICACAO PENULTIMO DIGITO
+        int soma1 = 0;
+        int peso1 = 8;
+
+        for(int i = 2; i <= 9; i++){
+            soma1 += numeros[i] * peso1;
+            peso1--;
+        }
+
+        int resto1 = soma1 % 11;
+        int penultimo = (resto1 < 2)? 0: 11 - resto1;
+
+        //VERIFICACAO ULTIMO DIGITO
+        int soma2 = 0;
+        int peso2 = 8;
+
+        for(int i = 2; i<=9; i++){
+            soma2 += numeros[i] * peso2;
+            peso2--;
+        }
+
+        int resto2 = soma2 % 11;
+        int ultimo = (resto2 < 2) ? 0: 11 - resto2;
+
+        if(penultimo == numeros[12] && ultimo == numeros[13]){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }
