@@ -1,5 +1,6 @@
 package com.abila.Store.util;
 
+import com.abila.Store.domain.Clientes;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.hibernate.mapping.List;
@@ -8,6 +9,17 @@ import org.springframework.util.StringUtils;
 @UtilityClass
 public class Utils {
     //FUNCOES
+    public static void validarDocumentos(Clientes clientes){
+        boolean temCpf = clientes.getCpf() != null && !clientes.getCpf().isBlank();
+        boolean temCnpj = clientes.getCnpj() != null && !clientes.getCnpj().isBlank();
+
+        if(temCpf && !validacaoCpf(clientes.getCpf())) throw new RuntimeException("Cpf ou cnpj informado é inválido");
+
+        if(temCnpj && !validacaoCnpj(clientes.getCnpj())) throw new RuntimeException("Cpf ou cnpj informado é inválido");
+
+        if(!temCpf && !temCnpj) throw new RuntimeException("Documentos invalidos ou não informados");
+    }
+
     public static boolean validacaoCpf(String cpf){
         if(cpf == null) return false;
         int[] numeros = converterParaArray(cpf, 11);

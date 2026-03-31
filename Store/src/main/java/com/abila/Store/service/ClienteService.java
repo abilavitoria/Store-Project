@@ -13,7 +13,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClienteService {
     private final ClienteRepository clienteRepo;
-    private final Utils utils;
 
     //consultar
     public Optional<Clientes> findById(Integer id){
@@ -22,9 +21,7 @@ public class ClienteService {
 
     //cadastrar
     public Clientes saveClientes(Clientes clientes){
-        if(utils.va){
-            throw new RuntimeException("CPF informado não é valido!");
-        }
+        Utils.validarDocumentos(clientes);
         return clienteRepo.save(clientes);
     }
 

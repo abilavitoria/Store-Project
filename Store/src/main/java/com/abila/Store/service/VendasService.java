@@ -83,5 +83,17 @@ public class VendasService {
     }
 
     //FUNCOES
+    public void adicionarItem(Vendas vendas, ItemVendas itemVendas){
+        vendas.getItens().add(itemVendas);
 
+        BigDecimal novoTotal = vendas.getPrecoTotal().add(itemVendas.getPrecoUnitario());
+        vendas.setPrecoTotal(novoTotal);
+    }
+
+    public void removerItem(Vendas vendas, ItemVendas itemVendas){
+        vendas.getItens().remove(itemVendas);
+
+        BigDecimal novoTotal = vendas.getPrecoTotal().subtract(itemVendas.getPrecoUnitario());
+        vendas.setPrecoTotal(novoTotal);
+    }
 }
