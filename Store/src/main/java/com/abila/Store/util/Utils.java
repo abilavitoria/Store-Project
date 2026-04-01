@@ -1,10 +1,13 @@
 package com.abila.Store.util;
 
 import com.abila.Store.domain.Clientes;
+import com.abila.Store.domain.ItemVendas;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.hibernate.mapping.List;
 import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
 
 @UtilityClass
 public class Utils {

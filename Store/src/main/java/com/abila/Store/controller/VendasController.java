@@ -1,16 +1,17 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.DTO.ItemVendaRequestDTO;
+import com.abila.Store.domain.DTO.ItemVendaResponseDTO;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.service.VendasService;
 import com.abila.Store.domain.Vendas;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-
+@RestController
 @RequestMapping("/vendas")
 public class VendasController {
     private final VendasService vendasService;
@@ -44,8 +45,11 @@ public class VendasController {
     //                  METODOS DE ITEM
     //adicionar itens
     @PostMapping("/{vendaId}/itens")
-    public ResponseEntity<ItemVendas> addItem(@Valid @PathVariable Integer vendaId, @RequestBody ItemVendas item){
-        ItemVendas novoItem = vendasService.addItemVendas(vendaId, item);
+    public ResponseEntity<ItemVendaResponseDTO> addItem(
+            @PathVariable Integer vendaId,
+            @Valid @RequestBody ItemVendaRequestDTO item
+    ){
+        ItemVendaResponseDTO novoItem = vendasService.addItemVendas(vendaId, item);
         return ResponseEntity.status(201).body(novoItem);
     }
     //editar itens
@@ -54,7 +58,7 @@ public class VendasController {
         return ResponseEntity.ok(vendasService.updateItemVendas(itemId, item));
     }
     //delete itens
-    @DeleteMapping("/iten/{itemId}")
+    @DeleteMapping("/itens/{itemId}")
     public ResponseEntity<Void> deleteItem(@Valid @PathVariable Integer itemId){
         vendasService.removeItemVendas(itemId);
         return ResponseEntity.noContent().build();
