@@ -2,13 +2,13 @@ package com.abila.Store.domain.DTO;
 
 import com.abila.Store.domain.Usuario;
 
-public record UsuarioResponse(
+public record UsuarioResponseDTO(
         Integer id,
         String login,
         String senha,
         String role
 ) {
-    public UsuarioResponse(Usuario usuario){
+    public UsuarioResponseDTO(Usuario usuario){
         this(
                 usuario.getId(),
                 usuario.getLogin(),
