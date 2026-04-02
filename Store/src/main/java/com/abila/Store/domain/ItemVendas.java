@@ -33,4 +33,23 @@ public class ItemVendas {
     @OneToOne
     @JoinColumn(name = "produto_id")
     private Produtos produto;
+
+    public void setPrecoUnitario(BigDecimal precoUnitario){
+        if (precoUnitario == null || precoUnitario.compareTo(BigDecimal.ZERO) <= 0){
+            throw new RuntimeException("Preço deve ser maior que zero!");
+        }
+        this.precoUnitario = precoUnitario;
+    }
+
+    public void setQuantidade(Integer quantidade){
+        if (quantidade == null || quantidade <= 0){
+            throw new RuntimeException("A quantidade deve ser pelo menos 1");
+        }
+        this.quantidade = quantidade;
+    }
+
+    public BigDecimal getSubtotal(){
+        if (this.precoUnitario == null || this.quantidade == null) return BigDecimal.ZERO;
+        return this.precoUnitario.multiply(new BigDecimal(this.quantidade));
+    }
 }
