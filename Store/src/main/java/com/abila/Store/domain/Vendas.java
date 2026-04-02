@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,8 +38,8 @@ public class Vendas {
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendas> itens = new ArrayList<>();
 
-    //METODOS
-    public void adicionarItem(ItemVendas itemVendas){
+    //METODOS VENDA
+    public void adicionarNovoItem(ItemVendas itemVendas){
         itemVendas.setVendas(this);
         this.itens.add(itemVendas);
 
@@ -46,18 +47,18 @@ public class Vendas {
     }
 
     public void removerItem(ItemVendas itemVendas){
-        if (this.itens.remove(itemVendas)){
+        if(this.itens.remove(itemVendas)){
             this.precoTotal = this.precoTotal.subtract(itemVendas.getSubtotal());
+        }
 
-            if (this.precoTotal.compareTo(BigDecimal.ZERO) < 0){
-                this.precoTotal = BigDecimal.ZERO;
-            }
+        if (this.precoTotal.compareTo(BigDecimal.ZERO) < 0){
+            this.precoTotal = BigDecimal.ZERO;
         }
     }
 
-    public void validarPreco(BigDecimal preco){
-        if (preco == null || preco.compareTo(BigDecimal.ZERO) <= 0){
-            throw new RuntimeException("O preço tem que ser maior que zero");
+    private void validarPreco(BigDecimal precoTotal){
+        if (precoTotal == null || precoTotal.compareTo(BigDecimal.ZERO) <= 0){
+            throw new RuntimeException("O preço do item deve ser maior que zero!");
         }
     }
 }

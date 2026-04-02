@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.math.BigDecimal;
 
+import java.math.BigDecimal;
+
 @UtilityClass
 public class Utils {
     //FUNCOES
