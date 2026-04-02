@@ -1,5 +1,9 @@
 package com.abila.Store.service;
 
+import com.abila.Store.domain.DTO.ItemVendaRequest;
+import com.abila.Store.domain.DTO.ItemVendaResponse;
+import com.abila.Store.domain.DTO.VendaRequest;
+import com.abila.Store.domain.DTO.VendaResponse;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
 import com.abila.Store.repository.ItemVendasRepository;
@@ -7,8 +11,8 @@ import com.abila.Store.repository.VendasRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.BigDecimal;
 
 import java.util.Optional;
 
@@ -20,21 +24,27 @@ public class VendasService {
 
 //                  METODOS DE VENDA
     //consultar
-    public Optional<Vendas> findById(Integer id){
-        return vendasRepo.findById(id);
+    public VendaResponse findById(Integer id){
+        return vendasRepo.findById(id)
+                .map(VendaResponse::new)
+                .orElseThrow(()->new RuntimeException("Venda não encontrada"));
     }
     //salvar
-    public Vendas saveVendas(Vendas vendas){
-        return vendasRepo.save(vendas);
+    @Transactional
+    public VendaResponse saveVendas(VendaRequest request){
+        Vendas vendas = new Vendas();
+
+        vendas.setDescricao(request.descricao());
+        vendas.setPrecoTotal(request.precoTotal());
+        vendas.setData(request.data());
+
+        Vendas salva = vendasRepo.save(vendas);
+        return new VendaResponse(salva);
     }
     //excluir
     public void deleteVendas(Integer id){
-        if (!vendasRepo.existsById(id)){
-            throw new RuntimeException("Venda não encontrada");
-        }
-        else {
-            vendasRepo.deleteById(id);
-        }
+        if (!vendasRepo.existsById(id)) throw new RuntimeException("Venda não encontrada");
+        vendasRepo.deleteById(id);
     }
     //editar
     public Vendas updateVendas(Vendas vendas, Integer id){
@@ -49,51 +59,47 @@ public class VendasService {
     //METODOS DE ITENS
     //adicionar itens a uma venda já existente
     @Transactional
-    public ItemVendas addItemVendas(Integer vendaId, ItemVendas novoItem){
-        return vendasRepo.findById(vendaId)
-                .map(venda ->{
-                    novoItem.setVendas(venda);
-                    return itemVendasRepo.save(novoItem);
-                })
-                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+    public ItemVendaResponse addItemVendas(Integer vendaId, ItemVendaRequest request){
+        Vendas vendas = vendasRepo.findById(vendaId)
+                .orElseThrow(()-> new RuntimeException("Venda não encontrada"));
+
+        ItemVendas novoItem = new ItemVendas();
+        novoItem.setNome(request.nome());
+        novoItem.setPrecoUnitario(request.precoUnitario());
+        novoItem.setQuantidade(request.quantidade());
+
+        vendas.adicionarItem(novoItem);
+        vendasRepo.save(vendas);
+
+        return new ItemVendaResponse(novoItem);
     }
     //remover itens
     @Transactional
     public void removeItemVendas(Integer itemId){
-        if (!itemVendasRepo.existsById(itemId)){
-            throw new RuntimeException("Item não encontrado");
-        }
-        else{
-            itemVendasRepo.deleteById(itemId);
-        }
+        ItemVendas itemVendas = itemVendasRepo.findById(itemId)
+                .orElseThrow(()-> new RuntimeException("Item não encontrados"));
+
+        Vendas vendas = itemVendas.getVendas();
+
+        vendas.removerItem(itemVendas);
+        vendasRepo.save(vendas);
     }
 
     //editar itens
     @Transactional
     public ItemVendas updateItemVendas(Integer itemId, ItemVendas itemAtualizado){
-        return itemVendasRepo.findById(itemId)
-                .map(itemExistente -> {
-                    itemExistente.setNome(itemAtualizado.getNome());
-                    itemExistente.setQuantidade(itemAtualizado.getQuantidade());
-                    itemExistente.setPrecoUnitario(itemAtualizado.getPrecoUnitario());
+        ItemVendas itemExistente = itemVendasRepo.findById(itemId)
+                .orElseThrow(()-> new RuntimeException("Item não encontrado"));
 
-                    return itemVendasRepo.save(itemExistente);
-                })
-                .orElseThrow(() -> new RuntimeException("Item não encontrado"));
-    }
+        Vendas vendas = itemAtualizado.getVendas();
+        vendas.removerItem(itemExistente);
 
-    //FUNCOES
-    public void adicionarItem(Vendas vendas, ItemVendas itemVendas){
-        vendas.getItens().add(itemVendas);
+        itemExistente.setNome(itemAtualizado.getNome());
+        itemExistente.setQuantidade(itemAtualizado.getQuantidade());
+        itemExistente.setPrecoUnitario(itemAtualizado.getPrecoUnitario());
 
-        BigDecimal novoTotal = vendas.getPrecoTotal().add(itemVendas.getPrecoUnitario());
-        vendas.setPrecoTotal(novoTotal);
-    }
-
-    public void removerItem(Vendas vendas, ItemVendas itemVendas){
-        vendas.getItens().remove(itemVendas);
-
-        BigDecimal novoTotal = vendas.getPrecoTotal().subtract(itemVendas.getPrecoUnitario());
-        vendas.setPrecoTotal(novoTotal);
+        vendas.adicionarItem(itemExistente);
+        vendasRepo.save(vendas);
+        return itemExistente;
     }
 }
