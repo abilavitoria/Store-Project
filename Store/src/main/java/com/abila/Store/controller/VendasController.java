@@ -2,6 +2,8 @@ package com.abila.Store.controller;
 
 import com.abila.Store.domain.DTO.ItemVendaRequest;
 import com.abila.Store.domain.DTO.ItemVendaResponse;
+import com.abila.Store.domain.DTO.VendaRequest;
+import com.abila.Store.domain.DTO.VendaResponse;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.service.VendasService;
 import com.abila.Store.domain.Vendas;
@@ -19,9 +21,9 @@ public class VendasController {
     //                  METODOS DE VENDA
     //consultar
     @GetMapping("/{id}")
-    public ResponseEntity<Vendas> findVendasById(@PathVariable Integer id){
+    public ResponseEntity<VendaResponse> findVendasById(@PathVariable Integer id){
         return vendasService.findById(id)
-                .map(ResponseEntity::ok)
+                .id(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
     //salvar
@@ -38,8 +40,8 @@ public class VendasController {
     }
     //editar
     @PutMapping("/{id}")
-    public ResponseEntity<Vendas> update(@RequestBody Vendas vendas, @PathVariable Integer id){
-        return ResponseEntity.ok(vendasService.updateVendas(vendas, id));
+    public ResponseEntity<VendaResponse> update(@RequestBody VendaRequest venda, @PathVariable Integer id){
+        return ResponseEntity.ok(vendasService.updateVendas(venda, id));
     }
 
     //                  METODOS DE ITEM
@@ -51,7 +53,7 @@ public class VendasController {
     }
     //editar itens
     @PutMapping("/itens/{itemId}")
-    public ResponseEntity<ItemVendas> updateItem(@Valid @PathVariable Integer itemId, @RequestBody ItemVendas item){
+    public ResponseEntity<ItemVendaResponse> updateItem(@Valid @PathVariable Integer itemId, @RequestBody ItemVendaRequest item){
         return ResponseEntity.ok(vendasService.updateItemVendas(itemId, item));
     }
     //delete itens

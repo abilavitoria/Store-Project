@@ -1,5 +1,6 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.DTO.ClienteResponse;
 import com.abila.Store.service.ClienteService;
 import com.abila.Store.domain.Clientes;
 
@@ -15,14 +16,14 @@ public class ClientesController {
     private final ClienteService clienteService;
     //consultar
     @GetMapping("/{id}")
-    public ResponseEntity<Clientes> findClienteById(@PathVariable Integer id){
+    public ResponseEntity<ClienteResponse> findClienteById(@PathVariable Integer id){
         return clienteService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
     //salvar
     @PostMapping
-    public ResponseEntity<Clientes> save(@RequestBody Clientes clientes){
+    public ResponseEntity<ClienteResponse> save(@RequestBody ClienteResponse clientes){
         Clientes novoCliente = clienteService.saveClientes(clientes);
         return ResponseEntity.status(201).body(novoCliente);
     }
@@ -34,7 +35,7 @@ public class ClientesController {
     }
     //editar
     @PutMapping("/{id}")
-    public ResponseEntity<Clientes> update(@PathVariable Integer id, @RequestBody Clientes clientes) {
+    public ResponseEntity<ClienteResponse> update(@PathVariable Integer id, @RequestBody ClienteResponse clientes) {
         return ResponseEntity.ok(clienteService.updateClientes(clientes, id));
     }
 }
