@@ -1,10 +1,12 @@
 package com.abila.Store.util;
 
 import com.abila.Store.domain.Clientes;
+import com.abila.Store.domain.ItemVendas;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.hibernate.mapping.List;
 import org.springframework.util.StringUtils;
+import java.util.List;
+import java.math.BigDecimal;
 
 @UtilityClass
 public class Utils {
@@ -75,5 +77,15 @@ public class Utils {
             numeros[i] = Character.getNumericValue(valorLimpo.charAt(i));
         }
         return numeros;
+    }
+
+    public static BigDecimal calcularTotalVenda(List<ItemVendas> itemVendas){
+        if(itemVendas == null || itemVendas.isEmpty()){
+            return BigDecimal.ZERO;
+        }
+
+        return itemVendas.stream()
+                .map(ItemVendas::getPrecoUnitario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
