@@ -26,7 +26,7 @@ public class Vendas {
     @Column(length = 100)
     private String descricao;
     @Column(nullable = false)
-    private BigDecimal precoTotal;
+    private BigDecimal precoTotal = BigDecimal.ZERO;
     @Column(nullable = false)
     private LocalDateTime data = LocalDateTime.now();
 
@@ -36,4 +36,28 @@ public class Vendas {
 
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendas> itens = new ArrayList<>();
+
+    //METODOS
+    public void adicionarItem(ItemVendas itemVendas){
+        itemVendas.setVendas(this);
+        this.itens.add(itemVendas);
+
+        this.precoTotal = this.precoTotal.add(itemVendas.getSubtotal());
+    }
+
+    public void removerItem(ItemVendas itemVendas){
+        if (this.itens.remove(itemVendas)){
+            this.precoTotal = this.precoTotal.subtract(itemVendas.getSubtotal());
+
+            if (this.precoTotal.compareTo(BigDecimal.ZERO) < 0){
+                this.precoTotal = BigDecimal.ZERO;
+            }
+        }
+    }
+
+    public void validarPreco(BigDecimal preco){
+        if (preco == null || preco.compareTo(BigDecimal.ZERO) <= 0){
+            throw new RuntimeException("O preço tem que ser maior que zero");
+        }
+    }
 }
