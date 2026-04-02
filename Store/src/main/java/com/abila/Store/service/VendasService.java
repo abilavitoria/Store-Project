@@ -1,6 +1,7 @@
 package com.abila.Store.service;
 
-import com.abila.Store.domain.DTO.ItemVendaRequestDTO;
+import com.abila.Store.domain.DTO.ItemVendaRequest;
+import com.abila.Store.domain.DTO.ItemVendaResponse;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
 import com.abila.Store.repository.ItemVendasRepository;
@@ -49,14 +50,25 @@ public class VendasService {
     //METODOS DE ITENS
     //adicionar itens a uma venda já existente
     @Transactional
-    public ItemVendas addItemVendas(Integer vendaId, @Valid ItemVendaRequestDTO novoItem){
+    public ItemVendaResponse addItemVendas(Integer vendaId, ItemVendaRequest request){
         Vendas vendas = vendasRepo.findById(vendaId)
                 .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+
+        ItemVendas novoItem = new ItemVendas();
+        novoItem.setNome(request.nome());
+        novoItem.setPrecoUnitario(request.precoUnitario());
+        novoItem.setQuantidade(request.quantidade());
 
         vendas.adicionarNovoItem(novoItem);
         vendasRepo.save(vendas);
 
-        return novoItem;
+        return new ItemVendaResponse(
+                novoItem.getId(),
+                novoItem.getNome(),
+                novoItem.getPrecoUnitario(),
+                novoItem.getQuantidade(),
+                novoItem.getSubtotal()
+        );
     }
     //remover itens
     @Transactional
@@ -71,19 +83,19 @@ public class VendasService {
 
     //editar itens
     @Transactional
-    public ItemVendas updateItemVendas(Integer itemId, ItemVendas itemExistente){
-        ItemVendas itemAtualizado = itemVendasRepo.findById(itemId)
+    public ItemVendas updateItemVendas(Integer itemId, ItemVendas itemAtualizado){
+        ItemVendas itemExistente = itemVendasRepo.findById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item não encontrado!"));
 
         Vendas vendas = itemExistente.getVendas();
         vendas.removerItem(itemExistente);
 
-        itemAtualizado.setNome(itemExistente.getNome());
-        itemAtualizado.setQuantidade(itemExistente.getQuantidade());
-        itemAtualizado.setPrecoUnitario(itemExistente.getPrecoUnitario());
+        itemExistente.setNome(itemAtualizado.getNome());
+        itemExistente.setQuantidade(itemAtualizado.getQuantidade());
+        itemExistente.setPrecoUnitario(itemAtualizado.getPrecoUnitario());
 
-        vendas.adicionarNovoItem(itemAtualizado);
+        vendas.adicionarNovoItem(itemExistente);
         vendasRepo.save(vendas);
-        return itemAtualizado;
+        return itemExistente;
     }
 }

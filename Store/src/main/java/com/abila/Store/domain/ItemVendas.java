@@ -50,7 +50,7 @@ public class ItemVendas {
     }
 
     public BigDecimal getSubtotal(){
-        if (this.precoUnitario == null || this.precoUnitario == null)return BigDecimal.ZERO;
+        if (this.precoUnitario == null || this.quantidade == null)return BigDecimal.ZERO;
         return this.precoUnitario.multiply(new BigDecimal(this.quantidade));
     }
 }

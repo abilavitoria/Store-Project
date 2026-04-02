@@ -1,7 +1,7 @@
 package com.abila.Store.controller;
 
-import com.abila.Store.domain.DTO.ItemVendaRequestDTO;
-import com.abila.Store.domain.DTO.ItemVendaResponseDTO;
+import com.abila.Store.domain.DTO.ItemVendaRequest;
+import com.abila.Store.domain.DTO.ItemVendaResponse;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.service.VendasService;
 import com.abila.Store.domain.Vendas;
@@ -45,11 +45,8 @@ public class VendasController {
     //                  METODOS DE ITEM
     //adicionar itens
     @PostMapping("/{vendaId}/itens")
-    public ResponseEntity<ItemVendaResponseDTO> addItem(
-            @PathVariable Integer vendaId,
-            @Valid @RequestBody ItemVendaRequestDTO item
-    ){
-        ItemVendaResponseDTO novoItem = vendasService.addItemVendas(vendaId, item);
+    public ResponseEntity<ItemVendaResponse> addItem(@PathVariable Integer vendaId, @RequestBody ItemVendaRequest request){
+        ItemVendaResponse novoItem = vendasService.addItemVendas(vendaId, request);
         return ResponseEntity.status(201).body(novoItem);
     }
     //editar itens
