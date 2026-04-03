@@ -1,7 +1,10 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.DTO.ProdutoRequest;
+import com.abila.Store.domain.DTO.ProdutoResponse;
 import com.abila.Store.service.ProdutoService;
 import com.abila.Store.domain.Produtos;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,16 +18,13 @@ public class ProdutosController {
 
     //consultar
     @GetMapping("/{id}")
-    public ResponseEntity<Produtos> findProdutosById(@PathVariable Integer id){
-        return produtoService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ProdutoResponse> findProdutosById(@PathVariable Integer id){
+        return ResponseEntity.ok(produtoService.findById(id));
     }
     //cadastrar
     @PostMapping
-    public ResponseEntity<Produtos> save(@RequestBody Produtos produtos){
-        Produtos novoProduto = produtoService.saveProdutos(produtos);
-        return ResponseEntity.status(201).body(novoProduto);
+    public ResponseEntity<ProdutoResponse> save(@RequestBody @Valid ProdutoRequest produtos){
+        return ResponseEntity.status(201).body(produtoService.saveProdutos(produtos));
     }
     //excluir
     @DeleteMapping("/{id}")
@@ -35,7 +35,7 @@ public class ProdutosController {
 
     //editar
     @PutMapping("/{id}")
-    public ResponseEntity<Produtos> update(@PathVariable Integer id, @RequestBody Produtos produtos){
+    public ResponseEntity<ProdutoResponse> update(@PathVariable Integer id, @RequestBody @Valid ProdutoRequest produtos){
         return ResponseEntity.ok(produtoService.updateProdutos(id, produtos));
     }
 }

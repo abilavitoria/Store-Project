@@ -1,13 +1,11 @@
 package com.abila.Store.service;
 import com.abila.Store.domain.Clientes;
+import com.abila.Store.domain.DTO.ClienteRequest;
+import com.abila.Store.domain.DTO.ClienteResponse;
 import com.abila.Store.repository.ClienteRepository;
 import com.abila.Store.util.Utils;
-import jdk.jshell.execution.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.swing.*;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,14 +13,27 @@ public class ClienteService {
     private final ClienteRepository clienteRepo;
 
     //consultar
-    public Optional<Clientes> findById(Integer id){
-        return clienteRepo.findById(id);
+    public ClienteResponse findById(Integer id){
+        return clienteRepo.findById(id)
+                .map(ClienteResponse::new)
+                .orElseThrow(()-> new RuntimeException("Cliente não encontrado"));
     }
 
     //cadastrar
-    public Clientes saveClientes(Clientes clientes){
-        Utils.validarDocumentos(clientes);
-        return clienteRepo.save(clientes);
+    public ClienteResponse saveClientes(ClienteRequest request){
+        Clientes novoCliente = new Clientes();
+
+        novoCliente.setVendas(request.vendas());
+        novoCliente.setNome(request.nome());
+        novoCliente.setEmail(request.email());
+        novoCliente.setTelefone(request.telefone());
+        novoCliente.setCpf(request.cpf());
+        novoCliente.setCnpj(request.cnpj());
+
+        Utils.validarDocumentos(novoCliente);
+
+        Clientes salvo = clienteRepo.save(novoCliente);
+        return new ClienteResponse(salvo);
     }
 
     //excluir
@@ -30,15 +41,24 @@ public class ClienteService {
         if(!clienteRepo.existsById(id)){
             throw new RuntimeException("Cliente não encontrado");
         }
-        else{clienteRepo.deleteById(id);}
+       clienteRepo.deleteById(id);
     }
 
     //editar
-    public Clientes updateClientes(Clientes clientes, Integer id){
+    public ClienteResponse updateClientes(ClienteRequest request, Integer id){
        return clienteRepo.findById(id)
-               .map(existingClientes -> {
-                    clientes.setId(id);
-                    return clienteRepo.save(clientes);
+               .map(clientesExistentes -> {
+                   clientesExistentes.setVendas(request.vendas());
+                   clientesExistentes.setNome(request.nome());
+                   clientesExistentes.setEmail(request.email());
+                   clientesExistentes.setTelefone(request.telefone());
+                   clientesExistentes.setCpf(request.cpf());
+                   clientesExistentes.setCnpj(request.cnpj());
+
+                   Utils.validarDocumentos(clientesExistentes);
+
+                   Clientes atualizado = clienteRepo.save(clientesExistentes);
+                    return new ClienteResponse(atualizado);
                })
                .orElseThrow(()-> new RuntimeException("Cliente com id" + id + "não encontrado"));
     }

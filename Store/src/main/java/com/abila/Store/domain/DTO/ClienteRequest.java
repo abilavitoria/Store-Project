@@ -1,5 +1,6 @@
 package com.abila.Store.domain.DTO;
 
+import com.abila.Store.domain.Vendas;
 import jakarta.validation.constraints.NotBlank;
 
 public record ClienteRequest(
@@ -7,6 +8,7 @@ public record ClienteRequest(
         @NotBlank String email,
         String telefone,
         String cpf,
-        String cnpj
+        String cnpj,
+        Vendas vendas
 ) {
 }
