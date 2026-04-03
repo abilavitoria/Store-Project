@@ -18,7 +18,8 @@ public record ClienteResponse(
                 clientes.getNome(),
                 clientes.getEmail(),
                 clientes.getTelefone(),
-                documentos(clientes.getCpf(), clientes.getCnpj())
+                documentos(clientes.getCpf(), clientes.getCnpj()),
+                clientes.getVendas()
         );
     }
 

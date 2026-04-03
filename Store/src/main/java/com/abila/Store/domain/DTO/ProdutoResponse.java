@@ -1,5 +1,6 @@
 package com.abila.Store.domain.DTO;
 
+import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Produtos;
 
 import java.math.BigDecimal;
@@ -9,7 +10,8 @@ public record ProdutoResponse(
         String nome,
         String descricao,
         BigDecimal preco,
-        Integer quantidade
+        Integer quantidade,
+        ItemVendas itens
 ) {
     public ProdutoResponse(Produtos produtos){
         this(
@@ -17,7 +19,8 @@ public record ProdutoResponse(
                 produtos.getNome(),
                 produtos.getDescricao(),
                 produtos.getPreco(),
-                produtos.getQuantidade()
+                produtos.getQuantidade(),
+                produtos.getItensVendidos()
         );
     }
 }

@@ -1,9 +1,11 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.DTO.ClienteRequest;
 import com.abila.Store.domain.DTO.ClienteResponse;
 import com.abila.Store.service.ClienteService;
 import com.abila.Store.domain.Clientes;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,15 +19,12 @@ public class ClientesController {
     //consultar
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponse> findClienteById(@PathVariable Integer id){
-        return clienteService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(clienteService.findById(id));
     }
     //salvar
     @PostMapping
-    public ResponseEntity<ClienteResponse> save(@RequestBody ClienteResponse clientes){
-        Clientes novoCliente = clienteService.saveClientes(clientes);
-        return ResponseEntity.status(201).body(novoCliente);
+    public ResponseEntity<ClienteResponse> save(@RequestBody @Valid ClienteRequest clientes){
+        return ResponseEntity.status(201).body(clienteService.saveClientes(clientes));
     }
     //excluir
     @DeleteMapping("/{id}")
@@ -35,7 +34,7 @@ public class ClientesController {
     }
     //editar
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> update(@PathVariable Integer id, @RequestBody ClienteResponse clientes) {
+    public ResponseEntity<ClienteResponse> update(@PathVariable Integer id, @RequestBody @Valid ClienteRequest clientes) {
         return ResponseEntity.ok(clienteService.updateClientes(clientes, id));
     }
 }

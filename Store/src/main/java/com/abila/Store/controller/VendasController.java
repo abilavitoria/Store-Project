@@ -22,14 +22,13 @@ public class VendasController {
     //consultar
     @GetMapping("/{id}")
     public ResponseEntity<VendaResponse> findVendasById(@PathVariable Integer id){
-        return vendasService.findById(id)
-                .id(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        VendaResponse response = vendasService.findById(id);
+        return ResponseEntity.ok(response);
     }
     //salvar
     @PostMapping
-    public ResponseEntity<Vendas> save(@RequestBody Vendas vendas){
-        Vendas novaVenda = vendasService.saveVendas(vendas);
+    public ResponseEntity<VendaResponse> save(@RequestBody @Valid VendaRequest vendas){
+        VendaResponse novaVenda = vendasService.saveVendas(vendas);
         return ResponseEntity.status(201).body(novaVenda);
     }
     //excluir
@@ -40,25 +39,24 @@ public class VendasController {
     }
     //editar
     @PutMapping("/{id}")
-    public ResponseEntity<VendaResponse> update(@RequestBody VendaRequest venda, @PathVariable Integer id){
+    public ResponseEntity<VendaResponse> update(@RequestBody @Valid VendaRequest venda, @PathVariable Integer id){
         return ResponseEntity.ok(vendasService.updateVendas(venda, id));
     }
 
     //                  METODOS DE ITEM
     //adicionar itens
     @PostMapping("/{vendaId}/itens")
-    public ResponseEntity<ItemVendaResponse> addItem(@PathVariable Integer vendaId, @RequestBody ItemVendaRequest request){
-        ItemVendaResponse novoItem = vendasService.addItemVendas(vendaId, request);
-        return ResponseEntity.status(201).body(novoItem);
+    public ResponseEntity<ItemVendaResponse> addItem(@PathVariable Integer vendaId, @RequestBody @Valid ItemVendaRequest item){
+        return ResponseEntity.status(201).body(vendasService.addItemVendas(vendaId, item));
     }
     //editar itens
     @PutMapping("/itens/{itemId}")
-    public ResponseEntity<ItemVendaResponse> updateItem(@Valid @PathVariable Integer itemId, @RequestBody ItemVendaRequest item){
+    public ResponseEntity<ItemVendaResponse> updateItem(@PathVariable Integer itemId, @RequestBody @Valid ItemVendaRequest item){
         return ResponseEntity.ok(vendasService.updateItemVendas(itemId, item));
     }
     //delete itens
     @DeleteMapping("/itens/{itemId}")
-    public ResponseEntity<Void> deleteItem(@Valid @PathVariable Integer itemId){
+    public ResponseEntity<Void> deleteItem(@PathVariable Integer itemId){
         vendasService.removeItemVendas(itemId);
         return ResponseEntity.noContent().build();
     }

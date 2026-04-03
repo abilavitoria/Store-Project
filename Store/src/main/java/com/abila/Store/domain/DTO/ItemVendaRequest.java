@@ -1,5 +1,7 @@
 package com.abila.Store.domain.DTO;
 
+import com.abila.Store.domain.Produtos;
+import com.abila.Store.domain.Vendas;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -7,6 +9,9 @@ import java.math.BigDecimal;
 
 public record ItemVendaRequest(
         @NotBlank String nome,
-        @NotNull @DecimalMin("0.01") BigDecimal precoUnitario,
-        @NotNull @Min(1) Integer quantidade
+        @Positive BigDecimal precoUnitario,
+        @Positive Integer quantidade,
+        @Positive BigDecimal subtotal,
+        Vendas vendas,
+        Produtos produtos
 ) { }
