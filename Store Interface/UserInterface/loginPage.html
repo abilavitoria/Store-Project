@@ -24,7 +24,7 @@
                 <input type="password" id="senha" placeholder="Digite sua senha" required>
             </div>
 
-            <button type="submit" class="btn-entrar">Entrar</button>
+            <button type="button" class="btn-entrar" onclick="entrar();">Entrar</button>
 
             <div class="footer-link">
                 <span>Não tem conta?</span>
@@ -32,5 +32,19 @@
             </div>
         </form>
     </div>
+
+    <script lang="javascript">
+        function entrar(){
+            let login = document.getElementById('login').value;
+            let senha = document.getElementById('senha').value;
+
+            if(login.trim() && senha.trim()){
+                window.location.href = "main.html";
+            }
+            else{
+                alert("Preencha os campos corretamente!");
+            }
+        }
+    </script>
 </body>
 </html>

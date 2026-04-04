@@ -94,3 +94,35 @@ input:focus{
 .footer-link a:hover{
     text-decoration: underline;
 }
+
+.toogle-container{
+    display: flex;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.toogle-container input[type = "radio"]{
+    display: none;
+}
+
+.toogle-label{
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+input[type = "radio"]:checked + .toogle-label{
+    background-color: #d85c74;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.input-group{
+    transition: opacity 0.4s ease;
+}
