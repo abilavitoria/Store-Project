@@ -8,62 +8,88 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1>Balcão Digital</h1>
-        <div class="user-info">Operador: <strong>Admin</strong></div>
+        <h1>Inicio</h1>
+        <div class="user-info">Operador: <strong id="nome-operador">Carregando...</strong></div>
     </nav>
 
     <main class="container">
         <div class="grid-menu">
-            <div class="card" id="btn-cliente">
-                <div class="fas-fa-person-icon"></div>
+            <div class="card" id="btn-cliente" onclick="acessarCliente();">
+                <div class="icon">👥</div>
                 <span>Clientes</span>
             </div>
 
-            <div class="card destaque" id="btn-pvd">
-                <div class="fas-fa-money"></div>
+            <div class="card destaque" id="btn-pvd" onclick="acessarPVD();">
+                <div class="icon">💰</div>
                 <span>PVD (vendas)</span>
             </div>
 
-            <div class="card" id="btn-produtos">
-                <div class="fas-fa-box"></div>
+            <div class="card" id="btn-produtos" onclick="acessarProdutos();">
+                <div class="icon">📦</div>
                 <span>Produtos</span>
             </div>
 
-            <div class="card" id="btn-relatorios">
-                <div class="fas-fa-graphic"></div>
+            <div class="card" id="btn-relatorios" onclick="acessarRelatorios();">
+                <div class="icon">📊</div>
                 <span>Relatórios</span>
             </div>
 
-            <div class="card" id="btn-propriedades">
-                <div class="fas-fa-engrenagem"></div>
+            <div class="card" id="btn-propriedades" onclick="acessarConfiguracoes();">
+                <div class="icon">⚙️</div>
                 <span>Configurações</span>
             </div>
 
-            <div class="card" id="btn-backup">
-                <div class="fas-fa-cloud"></div>
+            <div class="card" id="btn-backup" onclick="acessarBackup();">
+                <div class="icon">☁️</div>
                 <span>Back-up</span>
             </div>
 
-            <div class="card" id="btn-utilitarios">
-                <div class="fas-fa-ferraments"></div>
+            <div class="card" id="btn-utilitarios" onclick="acessarUtilitarios();">
+                <div class="icon">🛠️</div>
                 <span>Utilitarios</span>
             </div>
 
-            <div class="card" id="btn-comunicados">
-                <div class="fas-fa-beels"></div>
+            <div class="card" id="btn-comunicados" onclick="acessarComunicados();">
+                <div class="icon">🔔</div>
                 <span>Comunicados</span>
             </div>
         </div>
     </main>
 
-    <section id="tela-dashboard">
-        <div class="grid-menu">
-            <div class="card" id="btn-produtos">
-                <div class="fas-fa-box"></div>
-                <span>Produtos</span>
-            </div>
-        </div>
-    </section>
+    <script lang="javascript">
+        function acessarCliente(){
+            window.location.href = 'clientes.html';
+        }
 
+        function acessarUtilitarios(){
+            window.location.href = 'utilitarios.html';
+        }
+
+        function acessarConfiguracoes(){
+            window.location.href = 'configuracoes.html';
+        }
+
+        function acessarComunicados(){
+            window.location.href = 'comunicados.html';
+        }
+
+        function acessarBackup(){
+            window.location.href = 'backup.html';
+        }
+
+        window.onload = function(){
+            operadorSessao = localStorage.getItem("usuarioLogado");
+            nomeOperador = localStorage.getItem("nomeUsuario");
+
+            if(operadorSessao){
+                elementoOperador.innerText = operadorSessao;
+                nomeOperador.innerText = nomeOperador;
+            }
+            else{
+                elementoOperador.innerText = "Visitante";
+                nomeOperador.innerText = nomeOperador;
+            }
+        }
+    </script>
 </body>
 </html>

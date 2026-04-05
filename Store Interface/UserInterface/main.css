@@ -65,8 +65,8 @@ body{
 }
 
 .card.destaque{
-    background-color: #e3f2ff;
-    border: 2px solid #c99ac9;
+    background-color: #dde2e7;
+    border: 2px solid #ccb5cc;
 }
 
 @media (max-width: 480px) {

@@ -74,15 +74,17 @@
         }
 
         function entrar(){
-            const campos = ['nome', 'email', 'telefone', 'cpf', 'cnpj'];
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('telefone').value;
+            const cpf = document.getElementById('cpf').value;
+            const cnpj = document.getElementById('cnpj').value;
 
-            const todosPreenchidos = campos.every(id => document.getElementById(id).value.trim() !== "");
-
-            if(todosPreenchidos){
+            if(nome && email && telefone && cpf || cnpj){
                 window.location.href = "main.html";
             }
             else{
-                alert("Preencha todos os campos!");
+                alert("Preencha os campos corretamente!");
             }
         }
     </script>
