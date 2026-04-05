@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Página de Usuários</h1>
+        <div class="user-info">Operador: <strong>Admin</strong></div>
+    </nav>
+
+    <main class="container">
+        <div class="grid-menu" id="btn-consultar">
+            <div></div>
+            <span>Consultar</span>
+        </div>
+
+        <form class="form-consulta">
+            <div class="input-group">
+                <label for="consultar">Usuario</label>
+                <input type="text" id="consulta" placeholder="Nome do usuario" required>
+            </div>
+
+            <div class="response">
+                <span id="resonse-consulta"></span>
+            </div>
+        </form>
+
+        </div>
+
+
+        <div class="grid-menu" id="btn-criar">
+            <div></div>
+            <span>Criar</span>
+        </div>
+
+        <form class="form-criar">
+            <div class="input-group">
+                <label for="criar">Nome</label>
+                <input type="text" id="criar" placeholder="Nome do usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="criar">Senha</label>
+                <input type="text" id="criar" placeholder="Senha do usuario" required>
+            </div>
+
+            <div class="response">
+                <span id="resonse-criar"></span>
+            </div>
+        </form>
+
+        <div class="grid-menu" id="btn-editar">
+            <div></div>
+            <span>Editar</span>
+        </div>
+
+        <form class="form-editar">
+            <div class="input-group">
+                <label for="editar">Nome</label>
+                <input type="text" id="nome" placeholder="Nome do usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="editar">Email</label>
+                <input type="text" id="email" placeholder="Email do usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="editar">Telefone</label>
+                <input type="text" id="telefone" placeholder="Telefone do usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="editar">Cpf ou Cnpj</label>
+                <input type="text" id="document0" placeholder="Documento do usuario" required>
+            </div>
+
+            <div class="response">
+                <span id="resonse-editar"></span>
+            </div>
+        </form>
+
+        <div class="grid-menu" id="btn-excluir">
+            <div></div>
+            <span>Excluir</span>
+        </div>
+    </main>
+</body>
+</html>
