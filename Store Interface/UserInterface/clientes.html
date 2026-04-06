@@ -3,90 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="clientes.css">
     <title>Clientes</title>
 </head>
 <body>
     <nav class="navbar">
-        <h1>Página de Usuários</h1>
-        <div class="user-info">Operador: <strong>Admin</strong></div>
+        <h2>Clientes</h2>
     </nav>
 
     <main class="container">
-        <div class="grid-menu" id="btn-consultar">
-            <div></div>
-            <span>Consultar</span>
-        </div>
-
-        <form class="form-consulta">
+        <section class="card">
+            <div class="grid-menu"><span>Consultar Usuário</span></div>
             <div class="input-group">
-                <label for="consultar">Usuario</label>
-                <input type="text" id="consulta" placeholder="Nome do usuario" required>
+                <input type="text" id="input-consulta" placeholder="Digite o nome">
+                <button onclick="buscarUsuario();">Buscar</button>
             </div>
+            <div class="response"><span id="response-consulta"></span></div>
+        </section>
 
-            <div class="response">
-                <span id="resonse-consulta"></span>
+        <section class="card">
+            <div class="grid-menu"><span>Criar Usuário</span></div>
+            <div class="form-grid">
+                <input type="text" id="criar-nome" placeholder="Digite o nome">
+                <input type="password" id="criar-senha" placeholder="Digite a senha">
+                <button onclick="criarUsuario();">Cadastrar</button>
             </div>
-        </form>
+            <div class="response"><span id="response-criar"></span></div>
+        </section>
 
-        </div>
+        <section class="card">
+            <div class="grid-menu"><span>Alterar Usuário</span></div>
+            <div class="form-grid">
+                <input type="text" id="mudar-nome" placeholder="Digite o nome">
+                <input type="password" id="mudar-senha" placeholder="Digite a senha">
+                <button onclick="mudarUsuario();">Alterar</button>
+            </div>
+            <div class="response"><span id="response-alterar"></span></div>
+        </section>
 
-
-        <div class="grid-menu" id="btn-criar">
-            <div></div>
-            <span>Criar</span>
-        </div>
-
-        <form class="form-criar">
+        <section class="card">
+            <div class="grid-menu"><span>Deletar Usuário</span></div>
             <div class="input-group">
-                <label for="criar">Nome</label>
-                <input type="text" id="criar" placeholder="Nome do usuario" required>
+                <input type="text" id="input-deletar" placeholder="Digite o nome">
+                <button onclick="deletarUsuario();">Deletar</button>
             </div>
-
-            <div class="input-group">
-                <label for="criar">Senha</label>
-                <input type="text" id="criar" placeholder="Senha do usuario" required>
-            </div>
-
-            <div class="response">
-                <span id="resonse-criar"></span>
-            </div>
-        </form>
-
-        <div class="grid-menu" id="btn-editar">
-            <div></div>
-            <span>Editar</span>
-        </div>
-
-        <form class="form-editar">
-            <div class="input-group">
-                <label for="editar">Nome</label>
-                <input type="text" id="nome" placeholder="Nome do usuario" required>
-            </div>
-
-            <div class="input-group">
-                <label for="editar">Email</label>
-                <input type="text" id="email" placeholder="Email do usuario" required>
-            </div>
-
-            <div class="input-group">
-                <label for="editar">Telefone</label>
-                <input type="text" id="telefone" placeholder="Telefone do usuario" required>
-            </div>
-
-            <div class="input-group">
-                <label for="editar">Cpf ou Cnpj</label>
-                <input type="text" id="document0" placeholder="Documento do usuario" required>
-            </div>
-
-            <div class="response">
-                <span id="resonse-editar"></span>
-            </div>
-        </form>
-
-        <div class="grid-menu" id="btn-excluir">
-            <div></div>
-            <span>Excluir</span>
-        </div>
+            <div class="response"><span id="response-consulta"></span></div>
+        </section>
     </main>
+
+    <script lang="javascript">
+        const API_URL = "http://localhost:8081/clientes";
+
+        async function buscarUsuario() {
+            const nome = document.getElementById('input-consulta').value;
+            const campoResposta = document.getElementById('response-consulta');
+
+            try{
+                const response = await fetch (`${API_URL}?nome=${nome}`);
+                const dados = await response.json();
+
+                if(response.ok){
+                    campoResposta.innerText = `Usuario encontrado: ${dados.nome} - Email: ${dados.email}`;
+                }else{
+                    campoResposta.innerText = "Usuario não encontrado";
+                }
+
+            }catch(error){
+                console.error("Erro na API:", error);
+            }
+        }
+
+        async function criarUsuario() {
+            const nome = document.getElementById('criar-nome').value;
+            const senha = document.getElementById('criar-senha').value;
+
+            const novoUsuario = {
+                nome: nome,
+                senha: senha
+            };
+
+            try{
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {'Content-Type' : 'application/json'},
+                    body: JSON.stringify(novoUsuario)
+                });
+
+                if(response.ok){
+                    alert("Usuario criado com sucesso");
+                }
+            }catch(error){
+                    alert("Erro ao conectar com o servidor");
+                }
+        }
+
+        async function deletarUsuario(id) {
+            if(confirm("Tem certeza que deseja excluir?")) return;
+
+            try{
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if(response.ok){
+                    alert("Usuario excluido com sucesso!");
+                }
+            }catch(error){
+                console.error("Erro ao deletar");
+            }
+        }
+    </script>
 </body>
 </html>
