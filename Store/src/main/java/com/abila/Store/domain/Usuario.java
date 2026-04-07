@@ -28,13 +28,26 @@ public class Usuario implements UserDetails {
     private String login;
     @Column(nullable = false)
     private String senha;
-
     private String roles;
 
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(this.roles));
+        if (this.role == UserRoles.ADMIN){
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_VENDEDOR"),
+                    new SimpleGrantedAuthority("ROLE_CLIENTE")
+            );
+        }if (this.role == UserRoles.VENDEDOR){
+            return List.of(
+                    new SimpleGrantedAuthority("ROLE_VENDEDOR"),
+                    new SimpleGrantedAuthority("ROLE_CLIENTE")
+            );
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
     }
 
     @Override
