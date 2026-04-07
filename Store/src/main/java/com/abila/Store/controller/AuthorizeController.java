@@ -1,8 +1,11 @@
 package com.abila.Store.controller;
 
+import com.abila.Store.domain.DTO.DadosAutenticacao;
+import com.abila.Store.domain.DTO.DadosTokenJWT;
 import com.abila.Store.domain.Usuario;
 import com.abila.Store.repository.UsuarioRepository;
-import com.abila.Store.service.AutenticacaoService;
+import com.abila.Store.service.TokenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 public class AuthorizeController {
+    private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
     private final UsuarioRepository usuarioRepo;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody Usuario usuario){
-        if(usuarioRepo.findByLogin(usuario.getLogin()).isPresent()){
+    public ResponseEntity<String> cadastrar(@RequestBody @Valid Usuario usuario){
+        if(usuarioRepo.findByLogin(usuario.getLogin()) != null){
             return ResponseEntity.badRequest().body("Erro!:usuario ja existe");
         }
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
@@ -36,10 +40,12 @@ public class AuthorizeController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Usuario usuario){
-        var credentials = new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getSenha());
-        var authentication = authenticationManager.authenticate(credentials);
+    public ResponseEntity login(@RequestBody @Valid DadosAutenticacao dados){
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+        var authentication = authenticationManager.authenticate(authenticationToken);
 
-        return ResponseEntity.ok("Login efetuado com sucesso");
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
