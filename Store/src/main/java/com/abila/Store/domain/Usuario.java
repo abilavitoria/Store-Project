@@ -28,8 +28,8 @@ public class Usuario implements UserDetails {
     private String login;
     @Column(nullable = false)
     private String senha;
-    private String roles;
 
+    @Column(name = "roles", length = 100)
     @Enumerated(EnumType.STRING)
     private UserRoles role;
 

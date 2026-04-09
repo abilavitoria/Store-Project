@@ -28,16 +28,20 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/cadastrar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/produtos").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/clientes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/produtos/**").hasAnyRole("ADMIN", "VENDEDOR", "CLIENTE")
+                        .requestMatchers( "/produtos/**").hasRole("ADMIN")
 
-                        .requestMatchers("/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
-                        .requestMatchers(HttpMethod.PUT, "/itens/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.GET, "/clientes/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers( "/clientes/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/produtos/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/**/itens/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.GET, "/**/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.DELETE, "/vendas/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
 
                 ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

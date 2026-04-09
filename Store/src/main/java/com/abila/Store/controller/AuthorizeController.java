@@ -2,6 +2,7 @@ package com.abila.Store.controller;
 
 import com.abila.Store.domain.DTO.DadosAutenticacao;
 import com.abila.Store.domain.DTO.DadosTokenJWT;
+import com.abila.Store.domain.UserRoles;
 import com.abila.Store.domain.Usuario;
 import com.abila.Store.repository.UsuarioRepository;
 import com.abila.Store.service.TokenService;
@@ -27,16 +28,16 @@ public class AuthorizeController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<String> cadastrar(@RequestBody @Valid Usuario usuario){
+    public ResponseEntity cadastrar(@RequestBody @Valid Usuario usuario){
         if(usuarioRepo.findByLogin(usuario.getLogin()) != null){
             return ResponseEntity.badRequest().body("Erro!:usuario ja existe");
         }
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
-        if (usuario.getRoles() == null) usuario.setRoles("ROLE_USER");
+        if (usuario.getRole() == null) usuario.setRole(UserRoles.CLIENTE);
 
         usuarioRepo.save(usuario);
-        return ResponseEntity.ok("Usuario cadastrado com sucesso!");
+        return ResponseEntity.ok("Usuario cadastrado com sucesso!" + usuario.getRole());
     }
 
     @PostMapping("/login")

@@ -30,6 +30,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (!login.isEmpty()) {
                 UserDetails user = usuarioRepo.findByLogin(login);
 
+                System.out.println("Usuario logado" + login);
+                System.out.println("Autoridades" + user.getAuthorities());
+
                 if (user != null) {
                     var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
