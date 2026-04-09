@@ -16,24 +16,22 @@ import org.springframework.web.bind.annotation.*;
 public class ProdutosController {
     private final ProdutoService produtoService;
 
-    //consultar
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponse> findProdutosById(@PathVariable Integer id){
         return ResponseEntity.ok(produtoService.findById(id));
     }
-    //cadastrar
+
     @PostMapping
     public ResponseEntity<ProdutoResponse> save(@RequestBody @Valid ProdutoRequest produtos){
         return ResponseEntity.status(201).body(produtoService.saveProdutos(produtos));
     }
-    //excluir
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         produtoService.deleteProdutos(id);
         return ResponseEntity.noContent().build();
     }
 
-    //editar
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponse> update(@PathVariable Integer id, @RequestBody @Valid ProdutoRequest produtos){
         return ResponseEntity.ok(produtoService.updateProdutos(id, produtos));
