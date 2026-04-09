@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 public class ClienteService {
     private final ClienteRepository clienteRepo;
 
-    //consultar
+
     public ClienteResponse findById(Integer id){
         return clienteRepo.findById(id)
                 .map(ClienteResponse::new)
                 .orElseThrow(()-> new RuntimeException("Cliente não encontrado"));
     }
 
-    //cadastrar
+
     public ClienteResponse saveClientes(ClienteRequest request){
         Clientes novoCliente = new Clientes();
 
@@ -36,7 +36,7 @@ public class ClienteService {
         return new ClienteResponse(salvo);
     }
 
-    //excluir
+
     public void deleteClientes(Integer id){
         if(!clienteRepo.existsById(id)){
             throw new RuntimeException("Cliente não encontrado");
@@ -44,7 +44,7 @@ public class ClienteService {
        clienteRepo.deleteById(id);
     }
 
-    //editar
+
     public ClienteResponse updateClientes(ClienteRequest request, Integer id){
        return clienteRepo.findById(id)
                .map(clientesExistentes -> {

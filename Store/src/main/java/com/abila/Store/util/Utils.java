@@ -41,7 +41,7 @@ public class Utils {
         int digito1 = calcularDigitoInvertido(numeros, 12);
         int digito2 = calcularDigitoInvertido(numeros, 13);
 
-        return digito1 == numeros[12] && digito2 == numeros [13];
+        return digito1 == numeros[12] && digito2 == numeros[13];
     }
 
     private static int calcularDigitoInvertido(int[] numeros, int quantidade){
@@ -54,7 +54,6 @@ public class Utils {
 
             if(peso > 9) peso = 2;
         }
-
         int resto = soma % 11;
         return (resto < 2)? 0: 11 - resto;
     }
@@ -64,7 +63,6 @@ public class Utils {
         for (int i = 0; i < pesos.length; i++){
             soma += numeros[i] * pesos[i];
         }
-
         int resto = soma % 11;
         return (resto < 2) ? 0 : 11 - resto;
     }

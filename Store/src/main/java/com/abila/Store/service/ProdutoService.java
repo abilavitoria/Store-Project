@@ -15,13 +15,13 @@ import java.util.Optional;
 public class ProdutoService {
     private final ProdutosRepository produtosRepo;
 
-    //consultar
+
     public ProdutoResponse findById(Integer id){
         return produtosRepo.findById(id)
                 .map(ProdutoResponse::new)
                 .orElseThrow(()-> new RuntimeException("Produto não encontrado"));
     }
-    //cadastrar
+
     public ProdutoResponse saveProdutos(ProdutoRequest request){
         Produtos novoProduto = new Produtos();
 
@@ -34,14 +34,14 @@ public class ProdutoService {
         Produtos salvo = produtosRepo.save(novoProduto);
         return new ProdutoResponse(salvo);
     }
-    //excluir
+
     public void deleteProdutos(Integer id){
         if (!produtosRepo.existsById(id)){
             throw new RuntimeException("Produto nçao encontrado");
         }
         produtosRepo.deleteById(id);
     }
-    //editar
+
     public ProdutoResponse updateProdutos(Integer id, ProdutoRequest request){
         return produtosRepo.findById(id)
                 .map(produtosExistentes -> {
