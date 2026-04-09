@@ -34,7 +34,7 @@ public class AuthorizeController {
         }
         usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 
-        if (usuario.getRole() == null) usuario.setRole(UserRole.CLIENTE);
+        if (usuario.getRole() == null) usuario.setRole(UserRoles.CLIENTE);
 
         usuarioRepo.save(usuario);
         return ResponseEntity.ok("Usuario cadastrado com sucesso!" + usuario.getRole());
