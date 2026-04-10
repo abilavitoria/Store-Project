@@ -37,17 +37,17 @@ public class Usuario implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRoles.ADMIN){
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_VENDEDOR"),
-                    new SimpleGrantedAuthority("ROLE_CLIENTE")
+                    new SimpleGrantedAuthority("ADMIN"),
+                    new SimpleGrantedAuthority("VENDEDOR"),
+                    new SimpleGrantedAuthority("CLIENTE")
             );
         }if (this.role == UserRoles.VENDEDOR){
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_VENDEDOR"),
-                    new SimpleGrantedAuthority("ROLE_CLIENTE")
+                    new SimpleGrantedAuthority("VENDEDOR"),
+                    new SimpleGrantedAuthority("CLIENTE")
             );
         }
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        return List.of(new SimpleGrantedAuthority("CLIENTE"));
     }
 
     @Override

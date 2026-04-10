@@ -24,10 +24,10 @@ public record ClienteResponse(
     }
 
     private static String documentos(String cpf, String cnpj){
-        if (cpf != null || !cpf.isEmpty()){
+        if (cpf != null && !cpf.isEmpty()){
             return cpf.substring(0, 3) + "##.###-##";
         }
-        if (cnpj != null || !cnpj.isEmpty()){
+        if (cnpj != null && !cnpj.isEmpty()){
             return cnpj.substring(0, 3) + "#.###/####-##";
         }
         return "Documento não informado";

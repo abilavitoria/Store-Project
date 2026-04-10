@@ -25,8 +25,8 @@ public class Utils {
     }
 
     public static boolean validacaoCpf(String cpf){
-        if(cpf == null) return false;
         int[] numeros = converterParaArray(cpf, 11);
+        if (numeros == null)return false;
 
         int digito1 = calcularDigito(numeros, new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2});
         int digito2 = calcularDigito(numeros, new int[]{11, 10, 9, 8, 7, 6, 5, 4, 3, 2});
@@ -68,8 +68,11 @@ public class Utils {
     }
 
     public static int[] converterParaArray(String texto, int tamanho){
+        if (texto == null || texto.isBlank()) return null;
+
         String valorLimpo = texto.replaceAll("(\\D)", "");
         String regexRepetidos = "(\\d)\\1{"+(tamanho - 1)+"}";
+
         if (valorLimpo.length() != tamanho || valorLimpo.matches(regexRepetidos)) return null;
 
         int[] numeros = new int[tamanho];

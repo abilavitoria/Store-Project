@@ -20,10 +20,10 @@ public class TokenService {
     public String gerarToken(Usuario usuario){
         try {
             Algorithm algoritimo = Algorithm.HMAC256(secret);
-
             return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(usuario.getLogin())
+                    .withClaim("role", usuario.getRole().name())
                     .withExpiresAt(getExpiracao())
                     .sign(algoritimo);
         }catch (JWTVerificationException exception){
