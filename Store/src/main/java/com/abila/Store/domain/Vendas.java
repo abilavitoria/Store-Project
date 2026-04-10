@@ -1,5 +1,6 @@
 package com.abila.Store.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Vendas {
     @Column(nullable = false)
     private BigDecimal precoTotal = BigDecimal.ZERO;
     @Column(nullable = false)
+    @JsonFormat(pattern = "dd/mm/yyyy")
     private LocalDate data = LocalDate.now();
 
     @OneToOne
