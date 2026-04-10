@@ -3,6 +3,8 @@ package com.abila.Store.domain.DTO;
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,7 +13,7 @@ public record VendaResponse(
         Integer id,
         String descricao,
         BigDecimal precoTotal,
-        LocalDateTime data,
+        LocalDate data,
         Clientes clientes,
         List<ItemVendas> itens
 ){

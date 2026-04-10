@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +30,7 @@ public class Vendas {
     @Column(nullable = false)
     private BigDecimal precoTotal = BigDecimal.ZERO;
     @Column(nullable = false)
-    private LocalDateTime data = LocalDateTime.now();
+    private LocalDate data = LocalDate.now();
 
     @OneToOne
     @JoinColumn(name = "cliente_id", nullable = false)
