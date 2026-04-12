@@ -5,6 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <title>Store Main - Dashboard</title>
+    <script lang="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("token");
+
+            if(!token){
+                alert("Acesso negado, faça o login primeiro!");
+                window.location.href = "loginPage.html";
+                return;
+            }
+
+            const nome = localStorage.getItem("nomeUsuario");
+            document.getElementById("nome-operador".innerText = `Operador: ${nome}`);
+        })
+
+        function acessarCliente(){
+            window.location.href = 'clientes.html';
+        }
+
+        function acessarBackup(){
+            window.location.href = 'backup.html';
+        }
+        
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -29,67 +52,12 @@
                 <span>Produtos</span>
             </div>
 
-            <div class="card" id="btn-relatorios" onclick="acessarRelatorios();">
-                <div class="icon">📊</div>
-                <span>Relatórios</span>
-            </div>
-
-            <div class="card" id="btn-propriedades" onclick="acessarConfiguracoes();">
-                <div class="icon">⚙️</div>
-                <span>Configurações</span>
-            </div>
-
             <div class="card" id="btn-backup" onclick="acessarBackup();">
                 <div class="icon">☁️</div>
                 <span>Back-up</span>
             </div>
 
-            <div class="card" id="btn-utilitarios" onclick="acessarUtilitarios();">
-                <div class="icon">🛠️</div>
-                <span>Utilitarios</span>
-            </div>
-
-            <div class="card" id="btn-comunicados" onclick="acessarComunicados();">
-                <div class="icon">🔔</div>
-                <span>Comunicados</span>
-            </div>
         </div>
     </main>
-
-    <script lang="javascript">
-        function acessarCliente(){
-            window.location.href = 'clientes.html';
-        }
-
-        function acessarUtilitarios(){
-            window.location.href = 'utilitarios.html';
-        }
-
-        function acessarConfiguracoes(){
-            window.location.href = 'configuracoes.html';
-        }
-
-        function acessarComunicados(){
-            window.location.href = 'comunicados.html';
-        }
-
-        function acessarBackup(){
-            window.location.href = 'backup.html';
-        }
-
-        window.onload = function(){
-            operadorSessao = localStorage.getItem("usuarioLogado");
-            nomeOperador = localStorage.getItem("nomeUsuario");
-
-            if(operadorSessao){
-                elementoOperador.innerText = operadorSessao;
-                nomeOperador.innerText = nomeOperador;
-            }
-            else{
-                elementoOperador.innerText = "Visitante";
-                nomeOperador.innerText = nomeOperador;
-            }
-        }
-    </script>
 </body>
 </html>
