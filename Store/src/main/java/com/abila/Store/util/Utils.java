@@ -2,6 +2,7 @@ package com.abila.Store.util;
 
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.ItemVendas;
+import com.abila.Store.domain.Vendas;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
@@ -82,13 +83,11 @@ public class Utils {
         return numeros;
     }
 
-    public static BigDecimal calcularTotalVenda(List<ItemVendas> itemVendas){
-        if(itemVendas == null || itemVendas.isEmpty()){
-            return BigDecimal.ZERO;
-        }
+    public static BigDecimal totalVenda(List<ItemVendas> itemVendas){
+        if(itemVendas == null || itemVendas.isEmpty()) return BigDecimal.ZERO;
 
         return itemVendas.stream()
-                .map(ItemVendas::getPrecoUnitario)
+                .map(item -> item.getPrecoUnitario().multiply(new BigDecimal(item.getQuantidade())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

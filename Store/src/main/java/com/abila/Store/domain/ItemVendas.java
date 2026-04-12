@@ -28,6 +28,7 @@ public class ItemVendas {
 
     @ManyToOne
     @JoinColumn(name = "venda_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Vendas vendas;
 
     @OneToOne

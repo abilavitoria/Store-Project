@@ -1,25 +1,31 @@
 package com.abila.Store.service;
 
+import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.DTO.ItemVendaRequest;
 import com.abila.Store.domain.DTO.ItemVendaResponse;
 import com.abila.Store.domain.DTO.VendaRequest;
 import com.abila.Store.domain.DTO.VendaResponse;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
+import com.abila.Store.repository.ClienteRepository;
 import com.abila.Store.repository.ItemVendasRepository;
 import com.abila.Store.repository.VendasRepository;
 import jakarta.transaction.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import com.abila.Store.util.Utils;
 
 @Service
 @RequiredArgsConstructor
 public class VendasService {
     private final VendasRepository vendasRepo;
     private final ItemVendasRepository itemVendasRepo;
+    private final ClienteRepository clienteRepo;
 
     public VendaResponse findById(Integer id){
         return vendasRepo.findById(id)
@@ -29,12 +35,16 @@ public class VendasService {
 
     public VendaResponse saveVendas(VendaRequest request){
         Vendas novaVenda = new Vendas();
-
         novaVenda.setDescricao(request.descricao());
-        novaVenda.setPrecoTotal(request.precoTotal());
-        novaVenda.setData(request.data());
-        novaVenda.setCliente(request.clientes());
-        novaVenda.setItens((List<ItemVendas>) request.itens());
+        novaVenda.setData(LocalDateTime.now());
+
+        Clientes clientes = clienteRepo.findById(request.cliente_id())
+                        .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        novaVenda.setCliente(clientes);
+
+        if (request.itens() != null){
+            request.itens().forEach(novaVenda::adicionarNovoItem);
+        }
 
         Vendas salvo = vendasRepo.save(novaVenda);
         return new VendaResponse(salvo);
@@ -51,13 +61,19 @@ public class VendasService {
         return vendasRepo.findById(id)
                 .map(vendasExistentes -> {
                     vendasExistentes.setDescricao(request.descricao());
-                    vendasExistentes.setPrecoTotal(request.precoTotal());
-                    vendasExistentes.setData(request.data());
-                    vendasExistentes.setCliente(request.clientes());
-                    vendasExistentes.setItens(request.itens());
 
-                    Vendas atualizadas = vendasRepo.save(vendasExistentes);
-                    return new VendaResponse(atualizadas);
+                    Clientes cliente = clienteRepo.findById(request.cliente_id())
+                                    .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                    vendasExistentes.setCliente(cliente);
+
+                    vendasExistentes.getItens().clear();
+                    vendasExistentes.setPrecoTotal(BigDecimal.ZERO);
+
+                    if (request.itens() != null){
+                        request.itens().forEach(vendasExistentes::adicionarNovoItem);
+                    }
+
+                    return new VendaResponse(vendasRepo.save(vendasExistentes));
                 })
                 .orElseThrow(()-> new RuntimeException("Venda com o id" + id + "não encontrada"));
     }

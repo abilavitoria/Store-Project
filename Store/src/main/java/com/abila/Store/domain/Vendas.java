@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class Vendas {
     private BigDecimal precoTotal = BigDecimal.ZERO;
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/mm/yyyy")
-    private LocalDate data = LocalDate.now();
+    private LocalDateTime data;
 
     @OneToOne
     @JoinColumn(name = "cliente_id", nullable = false)
@@ -41,11 +42,13 @@ public class Vendas {
     @OneToMany(mappedBy = "vendas", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemVendas> itens = new ArrayList<>();
 
-    //METODOS VENDA
     public void adicionarNovoItem(ItemVendas itemVendas){
+        validarPreco(itemVendas.getPrecoUnitario());
+        if (this.itens == null) this.itens = new ArrayList<>();
+        if (this.precoTotal == null) this.precoTotal = BigDecimal.ZERO;
+
         itemVendas.setVendas(this);
         this.itens.add(itemVendas);
-
         this.precoTotal = this.precoTotal.add(itemVendas.getSubtotal());
     }
 
