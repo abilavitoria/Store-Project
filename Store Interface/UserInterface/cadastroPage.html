@@ -51,7 +51,7 @@
                 <input type="text" id="cnpj" placeholder="00.000.000/0000-00" required>
             </div>
 
-            <button type="button" class="btn-entrar" onclick="entrar();">Entrar</button>
+            <button type="submit" class="btn-entrar" onclick="entrar();">Entrar</button>
 
             <div class="footer-link">
                 <span>Já tem uma conta?</span>
@@ -65,16 +65,22 @@
             const isPF = document.getElementById('pessoaFisica').checked;
             const groupCpf = document.getElementById('group-cpf');
             const groupCnpj = document.getElementById('group-cnpj');
+            const inputCpf = document.getElementById('cpf');
+            const inputCnpj = document.getElementById('cnpj');
 
             if(isPF){
                 groupCpf.style.display = "block";
                 groupCnpj.style.display = "none";
-                document.getElementById('cnpj').value = "";
+                inputCpf.required = true;
+                inputCnpj.required = false;
+                inputCnpj.value = "";
             }
             else{
-                groupCnpj.style.display = "block";
                 groupCpf.style.display = "none";
-                document.getElementById('cpf').value = "";
+                groupCnpj.style.display = "block";
+                inputCpf.required = false;
+                inputCnpj.required = true;
+                inputCpf.value = "";
             }
         }
 
@@ -83,11 +89,10 @@
             const email = document.getElementById('email').value;
             const telefone = document.getElementById('telefone').value;
             const senha = document.getElementById('senha').value;
-            const cpf = document.getElementById('cpf').value;
-            const cnpj = document.getElementById('cnpj').value;
 
-            const documento  = isPF ? document.getElementById('cpf').value : document.getElementById('cnpj').value;
-            const tipoUsuario = isPF ? "VENDEDOR" : "ADMIN";
+            const isPF = document.getElementById('pessoaFisica').checked;
+            const documento = isPF ? document.getElementById('cpf').value : document.getElementById('cnpj').value;
+            const roleUsuario = isPF ? "VENDEDOR" : "ADMIN";
 
             if(!nome || !email || !telefone || !documento){
                 alert("Preencha os campos corretamente!");
@@ -96,25 +101,25 @@
 
             const usuarioRequest = {
                 nome: nome,
-                email: email,
+                login: email,
+                senha: senha,
                 telefone: telefone,
                 documento: documento,
-                tipo: tipoUsuario,
-                senha: senha
+                role: roleUsuario
             };
 
             try{
                 const response = await fetch('http://localhost:8081/auth/cadastrar', {
                     method: 'POST',
-                    headers:{'Content-Type':'application/json'  },
-                    body:JSON.stringify(usuarioRequest)
+                    headers:{'Content-Type':'application/json'},
+                    body: JSON.stringify(usuarioRequest)
                 });
 
                 if(response.ok){
                     alert("Cadastro realizado com sucesso!Agora faça o seu login");
                     window.location.href = "loginPage.html";
                 }else{
-                    alert("Erro ao cadastrar, verifique se as informações já existem");
+                    alert("Erro ao cadastrar, Verifique se essas informações já existem!");
                 }
             }catch(error){
                 alert("Não foi possível conectar com o servidor, o back-end está rodando?");

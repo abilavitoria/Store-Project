@@ -24,7 +24,7 @@
                 <input type="password" id="senha" placeholder="Digite sua senha" required>
             </div>
 
-            <button type="button" class="btn-entrar" onclick="entrar();">Entrar</button>
+            <button type="submit" class="btn-entrar" onclick="login();">Entrar</button>
 
             <div class="footer-link">
                 <span>Não tem conta?</span>
@@ -34,16 +34,34 @@
     </div>
 
     <script lang="javascript">
-        function entrar(){
-            let login = document.getElementById('login').value;
-            let senha = document.getElementById('senha').value;
+        async function login(){
+            const login = document.getElementById('login').value;
+            const senha = document.getElementById('senha').value;
 
-            if(login.trim() && senha.trim()){
-                window.location.href = "main.html";
+            if(!login || !senha) alert("Informe seu email e senha!"); return;
+
+            try{
+                const response = await fetch('http://localhost:8081/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({login, senha})
+                });
+
+                if(response.ok){
+                    const data = await response.json();
+
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("nomeUsuario", data.nome);
+                    localStorage.setItem("usuarioLogado", data.role);
+
+                    window.location.href = "main.html";
+                }else{
+                    alert("Login ou senha inválidos");
+                }
+            }catch(error){
+                alert("Erro ao authenticar");
             }
-            else{
-                alert("Preencha os campos corretamente!");
-            }
+        
         }
     </script>
 </body>
