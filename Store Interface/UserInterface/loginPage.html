@@ -12,7 +12,7 @@
         <h2>Acesse sua Conta</h2>
         <p>gerencie sua loja</p>
         
-        <form class="form-login">
+        <form class="form-login" id="form-login">
 
             <div class="input-group">
                 <label for="login">E-mail ou Usuário</label>
@@ -24,7 +24,7 @@
                 <input type="password" id="senha" placeholder="Digite sua senha" required>
             </div>
 
-            <button type="submit" class="btn-entrar" onclick="login();">Entrar</button>
+            <button type="submit" class="btn-entrar">Entrar</button>
 
             <div class="footer-link">
                 <span>Não tem conta?</span>
@@ -34,35 +34,33 @@
     </div>
 
     <script lang="javascript">
-        async function login(){
-            const login = document.getElementById('login').value;
-            const senha = document.getElementById('senha').value;
+        document.getElementById("form-login").addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-            if(!login || !senha) alert("Informe seu email e senha!"); return;
+            const loginUsuario = document.getElementById("login").value;
+            const senhaUsuario = document.getElementById("senha").value;
 
             try{
                 const response = await fetch('http://localhost:8081/auth/login', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({login, senha})
+                    body: JSON.stringify({login: loginUsuario, senha: senhaUsuario})
                 });
 
                 if(response.ok){
                     const data = await response.json();
+                    
+                    sessionStorage.setItem("token", data.token);
 
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("nomeUsuario", data.nome);
-                    localStorage.setItem("usuarioLogado", data.role);
-
+                    alert("Login realizado com sucesso!");
                     window.location.href = "main.html";
                 }else{
                     alert("Login ou senha inválidos");
                 }
             }catch(error){
-                alert("Erro ao authenticar");
+                console.log("Erro ao conectar", error);
             }
-        
-        }
+        })
     </script>
 </body>
 </html>
