@@ -31,10 +31,8 @@ public class Vendas {
     private String descricao;
     @Column(nullable = false)
     private BigDecimal precoTotal = BigDecimal.ZERO;
-    @Column(nullable = false)
-    @JsonFormat(pattern = "dd/mm/yyyy")
-    private LocalDateTime data;
-
+    @Column(nullable = false, columnDefinition = "timestamp(6)")
+    private LocalDateTime data ;
     @OneToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Clientes cliente;
