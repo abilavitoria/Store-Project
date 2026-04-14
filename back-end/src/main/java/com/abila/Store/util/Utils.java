@@ -82,12 +82,4 @@ public class Utils {
         }
         return numeros;
     }
-
-    public static BigDecimal totalVenda(List<ItemVendas> itemVendas){
-        if(itemVendas == null || itemVendas.isEmpty()) return BigDecimal.ZERO;
-
-        return itemVendas.stream()
-                .map(item -> item.getPrecoUnitario().multiply(new BigDecimal(item.getQuantidade())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
 }

@@ -11,18 +11,14 @@ public record ItemVendaResponse(
          String nome,
          BigDecimal precoUnitario,
          Integer quantidade,
-         BigDecimal subtotal,
-         Vendas vendas,
-         Produtos produtos
+         BigDecimal subtotal
 ) {
     public ItemVendaResponse(ItemVendas itemVendas){
         this(   itemVendas.getId(),
                 itemVendas.getNome(),
                 itemVendas.getPrecoUnitario(),
                 itemVendas.getQuantidade(),
-                itemVendas.getSubtotal(),
-                itemVendas.getVendas(),
-                itemVendas.getProduto()
+                itemVendas.getSubtotal()
         );
     }
 }

@@ -10,8 +10,7 @@ public record ProdutoResponse(
         String nome,
         String descricao,
         BigDecimal preco,
-        Integer quantidade,
-        ItemVendas itens
+        Integer quantidade
 ) {
     public ProdutoResponse(Produtos produtos){
         this(
@@ -19,8 +18,7 @@ public record ProdutoResponse(
                 produtos.getNome(),
                 produtos.getDescricao(),
                 produtos.getPreco(),
-                produtos.getQuantidade(),
-                produtos.getItensVendidos()
+                produtos.getQuantidade()
         );
     }
 }

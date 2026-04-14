@@ -33,12 +33,13 @@ public class VendasService {
                 .orElseThrow(()-> new RuntimeException("Venda não encontrada"));
     }
 
+    @Transactional
     public VendaResponse saveVendas(VendaRequest request){
         Vendas novaVenda = new Vendas();
         novaVenda.setDescricao(request.descricao());
         novaVenda.setData(LocalDateTime.now());
 
-        Clientes clientes = clienteRepo.findById(request.cliente_id())
+        Clientes clientes = clienteRepo.findById(request.clientes().getId())
                         .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         novaVenda.setCliente(clientes);
 
@@ -50,6 +51,7 @@ public class VendasService {
         return new VendaResponse(salvo);
     }
 
+    @Transactional
     public void deleteVendas(Integer id){
         if(!vendasRepo.existsById(id)){
             throw new RuntimeException("Venda não encontrada");
@@ -57,12 +59,13 @@ public class VendasService {
         vendasRepo.deleteById(id);
     }
 
+    @Transactional
     public VendaResponse updateVendas(VendaRequest request, Integer id){
         return vendasRepo.findById(id)
                 .map(vendasExistentes -> {
                     vendasExistentes.setDescricao(request.descricao());
 
-                    Clientes cliente = clienteRepo.findById(request.cliente_id())
+                    Clientes cliente = clienteRepo.findById(request.clientes().getId())
                                     .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
                     vendasExistentes.setCliente(cliente);
 
@@ -80,14 +83,17 @@ public class VendasService {
 
     @Transactional
     public ItemVendaResponse addItemVendas(Integer id, ItemVendaRequest request){
+        Vendas vendas = vendasRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venda não encontrada"));
+
         ItemVendas novoItem = new ItemVendas();
         novoItem.setNome(request.nome());
         novoItem.setPrecoUnitario(request.precoUnitario());
         novoItem.setQuantidade(request.quantidade());
-        novoItem.setVendas(request.vendas());
-        novoItem.setProduto(request.produtos());
 
+        vendas.adicionarNovoItem(novoItem);
         ItemVendas salvo = itemVendasRepo.save(novoItem);
+        vendasRepo.save(vendas);
         return new ItemVendaResponse(salvo);
     }
 
@@ -107,8 +113,6 @@ public class VendasService {
                     itemExistente.setNome(request.nome());
                     itemExistente.setPrecoUnitario(request.precoUnitario());
                     itemExistente.setQuantidade(request.quantidade());
-                    itemExistente.setVendas(request.vendas());
-                    itemExistente.setProduto(request.produtos());
 
                     ItemVendas atualizado = itemVendasRepo.save(itemExistente);
                     return new ItemVendaResponse(atualizado);

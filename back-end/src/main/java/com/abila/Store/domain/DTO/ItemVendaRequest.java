@@ -10,8 +10,5 @@ import java.math.BigDecimal;
 public record ItemVendaRequest(
         @NotBlank String nome,
         @Positive BigDecimal precoUnitario,
-        @Positive Integer quantidade,
-        @Positive BigDecimal subtotal,
-        Vendas vendas,
-        Produtos produtos
+        @Positive Integer quantidade
 ) { }

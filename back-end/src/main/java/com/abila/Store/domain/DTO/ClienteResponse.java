@@ -4,13 +4,14 @@ import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.Vendas;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 public record ClienteResponse(
         Integer id,
         String nome,
         String email,
         String telefone,
-        String documentos,
-        Vendas vendas
+        String documentos
 ) {
     public ClienteResponse(Clientes clientes){
         this(
@@ -18,8 +19,7 @@ public record ClienteResponse(
                 clientes.getNome(),
                 clientes.getEmail(),
                 clientes.getTelefone(),
-                documentos(clientes.getCpf(), clientes.getCnpj()),
-                clientes.getVendas()
+                documentos(clientes.getCpf(), clientes.getCnpj())
         );
     }
 

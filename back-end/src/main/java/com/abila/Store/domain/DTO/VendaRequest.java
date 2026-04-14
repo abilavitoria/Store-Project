@@ -12,7 +12,6 @@ import java.util.List;
 
 public record VendaRequest(
         String descricao,
-        @NotNull @Positive BigDecimal precoTotal,
         Clientes clientes,
         List<ItemVendas> itens
 ) {

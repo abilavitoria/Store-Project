@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <title>Store Main - Dashboard</title>
+    <script lang="javascript">
+        const token = sessionStorage.getItem("token");
+
+        if(!token){
+            alert("Acesso negado! Faça o login!");
+            window.location.href = "loginPage.html"
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Inicio</h1>
+        <div class="user-info">Operador: <strong id="nome-operador">Carregando...</strong></div>
+    </nav>
+
+    <main class="container">
+        <div class="grid-menu">
+            <div class="card" id="btn-cliente" onclick="acessarCliente();">
+                <div class="icon">👥</div>
+                <span>Clientes</span>
+            </div>
+
+            <div class="card destaque" id="btn-pvd" onclick="acessarPVD();">
+                <div class="icon">💰</div>
+                <span>PVD (vendas)</span>
+            </div>
+
+            <div class="card" id="btn-produtos" onclick="acessarProdutos();">
+                <div class="icon">📦</div>
+                <span>Produtos</span>
+            </div>
+
+            <div class="card" id="btn-backup" onclick="acessarBackup();">
+                <div class="icon">☁️</div>
+                <span>Back-up</span>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>

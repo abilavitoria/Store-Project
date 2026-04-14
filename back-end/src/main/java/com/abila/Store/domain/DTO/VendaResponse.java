@@ -3,6 +3,7 @@ package com.abila.Store.domain.DTO;
 import com.abila.Store.domain.Clientes;
 import com.abila.Store.domain.ItemVendas;
 import com.abila.Store.domain.Vendas;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,10 +14,10 @@ public record VendaResponse(
         Integer id,
         String descricao,
         BigDecimal precoTotal,
-        @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime data,
-        Clientes clientes,
-        List<ItemVendas> itens
+        String nomeCliente,
+        List<ItemVendaResponse> itens
 ){
     public VendaResponse(Vendas vendas){
         this(
@@ -24,8 +25,10 @@ public record VendaResponse(
                 vendas.getDescricao(),
                 vendas.getPrecoTotal(),
                 vendas.getData(),
-                vendas.getCliente(),
-                vendas.getItens()
+                vendas.getCliente().getNome(),
+                vendas.getItens().stream()
+                        .map(ItemVendaResponse::new)
+                        .toList()
         );
     }
 

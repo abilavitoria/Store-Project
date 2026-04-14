@@ -5,6 +5,7 @@ import com.abila.Store.domain.DTO.ProdutoRequest;
 import com.abila.Store.domain.DTO.ProdutoResponse;
 import com.abila.Store.domain.Produtos;
 import com.abila.Store.repository.ProdutosRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class ProdutoService {
                 .orElseThrow(()-> new RuntimeException("Produto não encontrado"));
     }
 
+    @Transactional
     public ProdutoResponse saveProdutos(ProdutoRequest request){
         Produtos novoProduto = new Produtos();
 
@@ -29,12 +31,12 @@ public class ProdutoService {
         novoProduto.setDescricao(request.descricao());
         novoProduto.setPreco(request.preco());
         novoProduto.setQuantidade(request.quantidade());
-        novoProduto.setItensVendidos(request.itens());
 
         Produtos salvo = produtosRepo.save(novoProduto);
         return new ProdutoResponse(salvo);
     }
 
+    @Transactional
     public void deleteProdutos(Integer id){
         if (!produtosRepo.existsById(id)){
             throw new RuntimeException("Produto nçao encontrado");
@@ -42,6 +44,7 @@ public class ProdutoService {
         produtosRepo.deleteById(id);
     }
 
+    @Transactional
     public ProdutoResponse updateProdutos(Integer id, ProdutoRequest request){
         return produtosRepo.findById(id)
                 .map(produtosExistentes -> {
@@ -49,10 +52,8 @@ public class ProdutoService {
                     produtosExistentes.setDescricao(request.descricao());
                     produtosExistentes.setPreco(request.preco());
                     produtosExistentes.setQuantidade(request.quantidade());
-                    produtosExistentes.setItensVendidos(request.itens());
 
-                    Produtos atualizado = produtosRepo.save(produtosExistentes);
-                    return new ProdutoResponse(atualizado);
+                    return new ProdutoResponse(produtosRepo.save(produtosExistentes));
                 })
                 .orElseThrow(() -> new RuntimeException("Produto com id" + id + "não encontrado"));
     }

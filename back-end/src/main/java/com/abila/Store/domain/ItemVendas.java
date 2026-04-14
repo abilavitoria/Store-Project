@@ -1,5 +1,7 @@
 package com.abila.Store.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,14 +30,13 @@ public class ItemVendas {
 
     @ManyToOne
     @JoinColumn(name = "venda_id")
-    @com.fasterxml.jackson.annotation.JsonIgnore
+    @JsonBackReference
     private Vendas vendas;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "produto_id")
     private Produtos produto;
 
-    //FUNCOES
     public void setPrecoUnitario(BigDecimal preco){
         if (preco == null || preco.compareTo(BigDecimal.ZERO) <= 0){
             throw new RuntimeException("O preco do item deve ser maior que zero");

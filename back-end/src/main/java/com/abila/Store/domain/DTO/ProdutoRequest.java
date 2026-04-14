@@ -11,7 +11,6 @@ public record ProdutoRequest (
         @NotBlank String nome,
         String descricao,
         @NotNull @DecimalMin("0.01") BigDecimal preco,
-        @NotNull Integer quantidade,
-        ItemVendas itens
+        @NotNull Integer quantidade
 ){
 }

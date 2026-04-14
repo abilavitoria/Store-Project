@@ -21,14 +21,12 @@ public class VendasController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VendaResponse> findVendasById(@PathVariable Integer id){
-        VendaResponse response = vendasService.findById(id);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(vendasService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<VendaResponse> save(@RequestBody @Valid VendaRequest vendas){
-        VendaResponse novaVenda = vendasService.saveVendas(vendas);
-        return ResponseEntity.status(201).body(novaVenda);
+        return ResponseEntity.status(201).body(vendasService.saveVendas(vendas));
     }
 
     @DeleteMapping("/{id}")
