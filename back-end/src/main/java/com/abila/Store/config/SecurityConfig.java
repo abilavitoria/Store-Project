@@ -15,12 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -35,40 +29,24 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/produtos/**").hasAnyAuthority("ADMIN", "VENDEDOR", "CLIENTE")
-                        .requestMatchers( "/produtos/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/produtos/**").hasAnyRole("ADMIN", "VENDEDOR", "CLIENTE")
+                        .requestMatchers( "/produtos/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/clientes/**").hasAnyAuthority("ADMIN", "VENDEDOR")
-                        .requestMatchers( "/clientes/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/clientes/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers( "/clientes/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.POST,"/vendas/**").hasAnyAuthority("ADMIN", "VENDEDOR")
-                        .requestMatchers(HttpMethod.PUT, "/vendas/**").hasAnyAuthority("ADMIN", "VENDEDOR")
-                        .requestMatchers(HttpMethod.PUT, "/itens/**").hasAnyAuthority("ADMIN", "VENDEDOR")
-                        .requestMatchers(HttpMethod.GET, "/vendas/**").hasAnyAuthority("ADMIN", "VENDEDOR")
-                        .requestMatchers(HttpMethod.DELETE, "/vendas/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.PUT, "/itens/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.GET, "/vendas/**").hasAnyRole("ADMIN", "VENDEDOR")
+                        .requestMatchers(HttpMethod.DELETE, "/vendas/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
 
-                )
-                .cors(Customizer.withDefaults())
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("*"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();

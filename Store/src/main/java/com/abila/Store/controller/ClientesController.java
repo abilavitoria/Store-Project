@@ -1,41 +1,39 @@
 package com.abila.Store.controller;
 
-import com.abila.Store.domain.DTO.ClienteRequest;
-import com.abila.Store.domain.DTO.ClienteResponse;
-import com.abila.Store.service.ClienteService;
 import com.abila.Store.domain.Clientes;
-
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
+<<<<<<< HEAD
 @CrossOrigin
+=======
+
+>>>>>>> b84267e75151040b30a28f852e2b13140608fefd
 @RestController
 @RequestMapping("/clientes")
 public class ClientesController {
-    private final ClienteService clienteService;
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponse> findClienteById(@PathVariable Integer id){
-        return ResponseEntity.ok(clienteService.findById(id));
+    private final ClientesController clientesController;
+    //consultar
+    @GetMapping
+    public ResponseEntity<Clientes> findClienteById(@PathVariable Integer id){
+        Clientes
+        return ResponseEntity.status(201).body()
     }
-
-    @PostMapping
-    public ResponseEntity<ClienteResponse> save(@RequestBody @Valid ClienteRequest clientes){
-        return ResponseEntity.status(201).body(clienteService.saveClientes(clientes));
+    //salvar
+    public Clientes save(@RequestBody Clientes clientes){
+        return clienteRepo.save(clientes);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
-        clienteService.deleteClientes(id);
-        return ResponseEntity.noContent().build();
+    //excluir
+    public void delete(@PathVariable Integer id){
+        clienteRepo.deleteById(id);
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> update(@PathVariable Integer id, @RequestBody @Valid ClienteRequest clientes) {
-        return ResponseEntity.ok(clienteService.updateClientes(clientes, id));
+    //editar
+    public Clientes update(@PathVariable Integer id, @RequestBody Clientes clientes){
+        clientes.setId(id);
+        return clienteRepo.save(clientes);
     }
 }

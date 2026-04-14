@@ -7,13 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record VendaRequest(
         String descricao,
-        Integer cliente_id,
+        @NotNull @Positive BigDecimal precoTotal,
+        Clientes clientes,
         List<ItemVendas> itens
 ) {
 }
