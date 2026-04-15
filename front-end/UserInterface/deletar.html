@@ -3,9 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="deletar.css">
     <title>Store - Deletar</title>
+    <style>
+        .response { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; display: none; }
+        .input-group { margin-bottom: 15px; }
+        .btn-deletar { background-color: #ff4d4d; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 4px; }
+        .btn-deletar:hover { background-color: #cc0000; }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <h2>Deletar Registro</h2>
+        <p>Selecione a categoria e o id do item que deseja deletar</p>
+        
+        <form class="delete-form" id="delete-form">
+            <div class="input-group">
+                <label for="tipo">Categorias</label>
+                <select id="tipo" required>
+                    <option value="produtos">Produtos</option>
+                    <option value="clientes">Clientes</option>
+                    <option value="vendas">Vendas</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="id">Id do Registro</label>
+                <input type="text" id="id" placeholder="ex: 1" required>
+            </div>
+
+            <button type="submit" class="btn-buscar">Deletar</button>
+
+            <div class="footer-link">
+                <a href="main.html">Voltar ao inicio</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("delete-form").addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const certeza = confirm("Tem certeza que deseja deletar esse item? Esta ação não pode ser desfeita");
+            if(!certeza){
+                alert("Ação cancelada"); return;
+            }
+
+            const token = sessionStorage.getItem('token');
+            const tipo = document.getElementById("tipo").value;
+            const id = document.getElementById("id").value;
+
+            const responseContainer = document.getElementById("response-container");
+            const responseContent = document.getElementById("response-content");
+
+            try{
+                const response = await fetch(`http://localhost:8081/${tipo}/${id}`, {
+                    method:'DELETE',
+                    headers:{
+                        'Authorization':`Bearer ${token}`,
+                        'Content-Type':'application/json'
+                    },
+                });
+
+                if(response.ok){
+                    alert("Sucesso: item deletado!");
+                    document.getElementById("id").value = "";
+                }else{
+                    const message = await response.text();
+                    alert("Erro ao buscar:" + (message || "Registro não encontrado"));
+                }
+            }catch(error){
+                console.error("Erro na conexão", error);
+                alert("Erro ao conectar com o servidor");
+            }
+        })
+    </script>
 </body>
 </html>
