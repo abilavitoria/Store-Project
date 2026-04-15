@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store - Buscar</title>
+    <style>
+        .response{margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; display: none;}
+        .input-group{margin-bottom: 15px;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Buscar Registro</h2>
+        <p>Selecione a categoria e o id que deseja encontrar</p>
+        
+        <form class="search-form" id="search-form">
+            <div class="input-group">
+                <label for="tipo">Categorias</label>
+                <select id="tipo" required>
+                    <option value="produtos">Produtos</option>
+                    <option value="clientes">Clientes</option>
+                    <option value="vendas">Vendas</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="id">Id</label>
+                <input type="text" id="id" placeholder="ex: 1" required>
+            </div>
+
+            <button type="submit" class="btn-buscar">Buscar</button>
+
+            <div class="response" id="response-container">
+                <strong>Resultado:</strong>
+                <pre id="response-content"></pre>
+            </div>
+
+            <div class="footer-link">
+                <a href="main.html">Voltar ao inicio</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("search-form").addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const token = sessionStorage.getItem('token');
+            const tipo = document.getElementById("tipo").value;
+            const id = document.getElementById("id").value;
+
+            const responseContainer = document.getElementById("response-container");
+            const responseContent = document.getElementById("response-content");
+
+            try{
+                const response = await fetch(`http://localhost:8081/${tipo}/${id}`, {
+                    method:'GET',
+                    headers:{
+                        'Authorization':`Bearer ${token}`,
+                        'Content-Type':'application/json'
+                    },
+                });
+
+                if(response.ok){
+                    const data = await response.json();
+                    
+                    responseContainer.style.display = 'block';
+                    responseContent.textContent = JSON.stringify(data, null, 2);
+                }else{
+                    const message = await response.text();
+                    alert("Erro ao buscar:" + (message || "Registro não encontrado"));
+                    responseContainer.style.display= 'none';
+                }
+            }catch(error){
+                console.error("Erro na conexão", error);
+                alert("Erro ao conectar com o servidor");
+            }
+        })
+    </script>
+</body>
+</html>
