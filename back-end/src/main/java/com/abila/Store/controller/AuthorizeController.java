@@ -2,6 +2,7 @@ package com.abila.Store.controller;
 
 import com.abila.Store.domain.DTO.DadosAutenticacao;
 import com.abila.Store.domain.DTO.DadosTokenJWT;
+import com.abila.Store.domain.DTO.UsuarioRequest;
 import com.abila.Store.domain.UserRoles;
 import com.abila.Store.domain.Usuario;
 import com.abila.Store.repository.UsuarioRepository;
@@ -38,7 +39,7 @@ public class AuthorizeController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid DadosAutenticacao dados){
+    public ResponseEntity login(@RequestBody @Valid UsuarioRequest dados){
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         var authentication = authenticationManager.authenticate(authenticationToken);
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="PDV.css">
+    <title>Store - PDV - vendas</title>
+</head>
+<body>
+    <div class="container-pdv">
+        <h2>PDV - Realizar Venda</h2>
+
+        <div class="flex-row">
+            <div class="col">
+                <label>Id do cliente</label>
+                <input type="number" id="cliente_id" placeholder="ex: 01">
+            </div>
+
+            <div class="col">
+                <label>Descrição Venda</label>
+                <input type="text" id="venda-descricao" placeholder="ex: venda 01">
+            </div>
+        </div>
+
+        <hr>
+
+        <h3>Adicionar itens</h3>
+        <div class="flex-row">
+            <div class="col">
+                <label>Id produto</label>
+                <input type="number" id="id_produto">
+            </div>
+
+            <div class="col">
+                <label>Quantidade</label>
+                <input type="number" id="qtd_produto" value="1">
+            </div>
+
+            <div class="col" style="align-self: flex-end;">
+                <button class="btn-add" onclick="comprar()">+Comprar</button>
+            </div>
+        </div>
+
+        <table id="tabela-itens">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Preço Un</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        <div class="total-container">
+            Total: R$ <span id="valor-total">0.00</span>
+        </div>
+
+        <button class="btn-salvar" onclick="finalizarVenda()">Finalizar Venda</button>
+        <div class="footer-link">
+            <a href="main.html">Voltar</a>
+        </div>
+    </div>
+
+    <script src="PDV.js"></script>
+</body>
+</html>

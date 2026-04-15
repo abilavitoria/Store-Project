@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="cadastroStyle.css">
-    <title>Store cadastro</title>
+    <title>Store - Cadastro</title>
 </head>
 <body>
     <div class="container">
@@ -65,7 +65,7 @@
                 });
 
                 if(response.ok){
-                    alert("Cadastro realizado com sucesso" + role + "Agora faça seu login!"); 
+                    alert("Cadastro ${role} realizado com sucesso! Agora faça seu login!"); 
                     window.location.href = "loginPage.html";
                 }else{
                     const erro = await response.text();

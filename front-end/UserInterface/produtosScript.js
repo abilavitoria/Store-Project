@@ -1,11 +1,11 @@
-const API_URL = 'http://localhost:8081/produtos';
+const API_URL = "http://localhost:8081/produtos";
 const token = localStorage.getItem('token');
 
 document.addEventListener('DOMContentLoaded', listarProdutos);
 
 async function listarProdutos() {
     const response = await fetch(API_URL, {
-        headers:{'Authorization': `Bearer ${token}`}
+        headers: {'Authorization': `Bearer ${token}`}
     });
 
     if(response.ok){
@@ -23,7 +23,7 @@ async function listarProdutos() {
     }
 }
 
-document.getElementById("produto-form").addEventListener('submit', async (evento) => {
+document.getElementById("produto-form").addEventListener('submit', async (evento) =>{
     evento.preventDefault();
 
     const dados = {
@@ -35,23 +35,23 @@ document.getElementById("produto-form").addEventListener('submit', async (evento
 
     const response = await fetch(API_URL, {
         method: 'POST',
-        headers: {'Content-Type':'application/json', 'Authorization':`Bearer ${token}`},
+        headers:{'Content-Type':'application/json', "Authorization":`Bearer ${token}`},
         body: JSON.stringify(dados)
     });
-    
+
     if(response.ok){
         listarProdutos();
         evento.target.reset();
     }else{
-        alert("Erro ao cadastrar novo produto, verifique suas permissões");
+        alert("Erro ao cadastrar verifique suas permissões");
     }
 });
 
 async function deletarProduto(id){
-    if(confirm("Remover este item do estoque?")){
+    if(confirm("Remover item do estoque?")){
         await fetch(`${API_URL}/${id}`, {
-            method:'DELETE',
-            headers:{'Authorization':`Bearer ${token}`}
+            method: 'DELETE',
+            headers:{'Authorization': `Bearer ${token}`}
         });
         listarProdutos();
     }

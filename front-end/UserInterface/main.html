@@ -5,26 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
     <title>Store Main - Dashboard</title>
-    <script lang="javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-            const token = localStorage.getItem("token");
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () =>{
+            const token = sessionStorage.getItem('token');
+            const nome = sessionStorage.getItem('nomeUsuario');
 
             if(!token){
-                alert("Acesso negado, faça o login primeiro!");
+                alert("Acesso negado! faça o login primeiro");
                 window.location.href = "loginPage.html";
                 return;
             }
 
-            const nome = localStorage.getItem("nomeUsuario");
-            document.getElementById("nome-operador".innerText = `Operador: ${nome}`);
-        })
+            const elementoNome = document.getElementById("nome-operador");
+            if(elementoNome) elementoNome.innerText = nome || 'Usuario';
+        });
 
         function acessarCliente(){
             window.location.href = 'clientes.html';
         }
 
-        function acessarBackup(){
-            window.location.href = 'backup.html';
+        function acessarPDV(){
+            window.location.href = 'PDV.html';
+        }
+
+        function acessarProdutos(){
+            window.location.href = 'produtos.html';
+        }
+
+        function acessarConfiguracoes(){
+            window.location.href = 'configuracoes.html';
         }
         
     </script>
@@ -42,9 +52,9 @@
                 <span>Clientes</span>
             </div>
 
-            <div class="card destaque" id="btn-pvd" onclick="acessarPVD();">
+            <div class="card destaque" id="btn-pvd" onclick="acessarPDV();">
                 <div class="icon">💰</div>
-                <span>PVD (vendas)</span>
+                <span>PDV (vendas)</span>
             </div>
 
             <div class="card" id="btn-produtos" onclick="acessarProdutos();">
@@ -52,8 +62,8 @@
                 <span>Produtos</span>
             </div>
 
-            <div class="card" id="btn-backup" onclick="acessarBackup();">
-                <div class="icon">☁️</div>
+            <div class="card" id="btn-backup" onclick="acessarConfiguracoes();">
+                <div class="icon">⚙️</div>
                 <span>Back-up</span>
             </div>
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="loginStyle.css">
-    <title>Store login</title>
+    <title>Store - Login</title>
 </head>
 <body>
     
@@ -37,25 +37,31 @@
         document.getElementById("form-login").addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const loginUsuario = document.getElementById("login").value;
-            const senhaUsuario = document.getElementById("senha").value;
+            const dados = {
+                login: document.getElementById("login").value,
+                senha: document.getElementById("senha").value
+            };
 
             try{
                 const response = await fetch('http://localhost:8081/auth/login', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({login: loginUsuario, senha: senhaUsuario})
+                    body: JSON.stringify(dados)
                 });
 
                 if(response.ok){
                     const data = await response.json();
                     
                     sessionStorage.setItem('token', data.token);
+                    sessionStorage.setItem('nomeUsuario', document.getElementById("login").value);
 
                     alert("Login realizado com sucesso!");
                     window.location.href = "main.html";
                 }else{
-                    alert("Login ou senha inválidos");
+                    const erroText = await response.text();
+                    console.log("Status de erro:", response.status);
+                    console.log("Detalhes do erro:", erroText);
+                    alert("Erro:" + response.status + "-" + erroText);
                 }
             }catch(error){
                 console.log("Erro ao conectar", error);
