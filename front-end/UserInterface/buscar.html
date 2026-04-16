@@ -65,9 +65,24 @@
 
                 if(response.ok){
                     const data = await response.json();
-                    
                     responseContainer.style.display = 'block';
-                    responseContent.textContent = JSON.stringify(data, null, 2);
+
+                    if(tipo === "vendas"){
+                        let itensHtml = data.itens.map(item =>
+                            `<li>${item.nome} - Qtd: ${item.quantidade} - R$ ${item.precoUnitario.toFixed(2)}</li>`
+                        ).join('');
+                        
+                        responseContent.innerHTML = `
+                            <strong>ID:</strong>${data.id} <br>
+                            <strong>Cliente:</strong>${data.nomeCliente} <br>
+                            <strong>Descrição:</strong>${data.descricao} <br>
+                            <strong>Total:</strong> ${data.precoTotal.toFixed(2)} <br>
+                            <strong>Itens:</strong> 
+                            <ul>${itensHtml}</ul>
+                        `
+                    }else{
+                        responseContent.textContent = JSON.stringify(data, null, 2);
+                    }
                 }else{
                     const message = await response.text();
                     alert("Erro ao buscar:" + (message || "Registro não encontrado"));

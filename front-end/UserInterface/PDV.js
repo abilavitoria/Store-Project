@@ -6,6 +6,7 @@ async function comprar(){
     const token = sessionStorage.getItem('token');
 
     if(!id) return alert("Informe o id do produto");
+    if(parseInt(quantidade) <= 0)return alert("A quantidade deve ser maior que zero")
 
     try{
         const response = await fetch(`http://localhost:8081/produtos/${id}`, {
@@ -16,19 +17,22 @@ async function comprar(){
             const produto = await response.json();
 
             const item = {
-                produto:{id: produto.id},
+                produtoId: produto.id,
                 nome: produto.nome,
-                quantidade: quantidade,
+                quantidade: parseInt(quantidade),
                 precoUnitario: produto.preco
             };
 
             carrinho.push(item);
             atualizarTabela();
+
+            document.getElementById("id_produto").value = "";
+            document.getElementById("quantidade").value = "1";
         }else{
             alert("Produto não encontrado!");
         }
     }catch(error){
-        console.error(error);
+        console.error("Erro na busca do produto:", error);
     }
 }
 
@@ -38,12 +42,12 @@ function atualizarTabela(){
     tbody.innerHTML = "";
     let totalGeral = 0;
 
-    carrinho.forEach((item, index) => {
+    carrinho.forEach((item) => {
         const subtotal = item.quantidade * item.precoUnitario;
         totalGeral += subtotal;
         tbody.innerHTML += `
             <tr>
-                <td>${item.produto.id}</td>
+                <td>${item.produtoId}</td>
                 <td>${item.nome}</td>
                 <td>${item.quantidade}</td>
                 <td>${item.precoUnitario.toFixed(2)}</td>
@@ -56,14 +60,19 @@ function atualizarTabela(){
 
 async function finalizarVenda(){
     const token = sessionStorage.getItem('token');
+    const idClienteInput = document.getElementById("cliente_id").value;
+
+    if(!idClienteInput) return alert("Informe o id do cliente!");
+    if(carrinho.length === 0) return alert("O carrinho está vazio!");
 
     const dadosVenda = {
         descricao: document.getElementById("venda-descricao").value,
-        cliente: {id: document.getElementById("cliente_id").value},
-        itens: carrinho
+        clienteId: parseInt(idClienteInput),
+        itens: carrinho.map(item => ({
+            produtoId: item.produtoId,
+            quantidade: item.quantidade
+        }))
     };
-
-    if(carrinho.length === 0)return alert("O carrinho está vazio!");
 
     try{
         const response = await fetch('http://localhost:8081/vendas', {
@@ -77,11 +86,14 @@ async function finalizarVenda(){
 
         if(response.ok){
             alert("Venda realizada com sucesso!");
+            carrinho = [];
             window.location.reload();
         }else{
-            alert("Eroo ao finalizar venda");
+            const message = await response.text();
+            alert("Erro ao finalizar venda" + message);
         }
     }catch(error){
-        console.error(error);
+        console.error("Erro na requisição POST", error);
+        alert("Erro na conexão com o servidor");
     }
 }

@@ -1,32 +1,12 @@
 package com.abila.Store.util;
 
-import com.abila.Store.domain.Clientes;
-import com.abila.Store.domain.ItemVendas;
-import com.abila.Store.domain.Vendas;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.springframework.util.StringUtils;
-import java.util.List;
-import java.math.BigDecimal;
-
-import java.math.BigDecimal;
 
 @UtilityClass
 public class Utils {
-    //FUNCOES
-    public static void validarDocumentos(Clientes clientes){
-        boolean temCpf = clientes.getCpf() != null && !clientes.getCpf().isBlank();
-        boolean temCnpj = clientes.getCnpj() != null && !clientes.getCnpj().isBlank();
 
-        if(temCpf && !validacaoCpf(clientes.getCpf())) throw new RuntimeException("Cpf ou cnpj informado é inválido");
-
-        if(temCnpj && !validacaoCnpj(clientes.getCnpj())) throw new RuntimeException("Cpf ou cnpj informado é inválido");
-
-        if(!temCpf && !temCnpj) throw new RuntimeException("Documentos invalidos ou não informados");
-    }
-
-    public static boolean validacaoCpf(String cpf){
-        int[] numeros = converterParaArray(cpf, 11);
+    public static boolean validacaoCpf(String documento){
+        int[] numeros = converterParaArray(documento, 11);
         if (numeros == null)return false;
 
         int digito1 = calcularDigito(numeros, new int[]{10, 9, 8, 7, 6, 5, 4, 3, 2});
@@ -35,9 +15,9 @@ public class Utils {
         return digito1 == numeros[9] && digito2 == numeros[10];
     }
 
-    public static boolean validacaoCnpj(String cnpj){
-        if(cnpj == null) return false;
-        int[] numeros = converterParaArray(cnpj, 14);
+    public static boolean validacaoCnpj(String documento){
+        if(documento == null) return false;
+        int[] numeros = converterParaArray(documento, 14);
 
         int digito1 = calcularDigitoInvertido(numeros, 12);
         int digito2 = calcularDigitoInvertido(numeros, 13);

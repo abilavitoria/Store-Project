@@ -1,0 +1,4 @@
+ALTER TABLE clientes DROP COLUMN cpf;
+ALTER TABLE clientes DROP COLUMN cnpj;
+
+ALTER TABLE clientes ADD COLUMN documento VARCHAR(14) NOT NULL ;

@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ProdutoService {
     private final ProdutosRepository produtosRepo;
 
-
+    @Transactional
     public ProdutoResponse findById(Integer id){
         return produtosRepo.findById(id)
                 .map(ProdutoResponse::new)
@@ -28,7 +28,6 @@ public class ProdutoService {
         Produtos novoProduto = new Produtos();
 
         novoProduto.setNome(request.nome());
-        novoProduto.setDescricao(request.descricao());
         novoProduto.setPreco(request.preco());
         novoProduto.setQuantidade(request.quantidade());
 
@@ -49,7 +48,6 @@ public class ProdutoService {
         return produtosRepo.findById(id)
                 .map(produtosExistentes -> {
                     produtosExistentes.setNome(request.nome());
-                    produtosExistentes.setDescricao(request.descricao());
                     produtosExistentes.setPreco(request.preco());
                     produtosExistentes.setQuantidade(request.quantidade());
 

@@ -9,8 +9,7 @@ public record ClienteRequest(
         @NotBlank String nome,
         @NotBlank String email,
         String telefone,
-        String cpf,
-        String cnpj,
+        String documento,
         Vendas vendas
 ) {
 }

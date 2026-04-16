@@ -11,7 +11,7 @@ public record ClienteResponse(
         String nome,
         String email,
         String telefone,
-        String documentos
+        String documento
 ) {
     public ClienteResponse(Clientes clientes){
         this(
@@ -19,7 +19,7 @@ public record ClienteResponse(
                 clientes.getNome(),
                 clientes.getEmail(),
                 clientes.getTelefone(),
-                documentos(clientes.getCpf(), clientes.getCnpj())
+                clientes.getDocumento()
         );
     }
 

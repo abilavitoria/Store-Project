@@ -1,11 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="buscar.css">
     <title>Store - Alterar</title>
+    <style>
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
+
 <body>
-    
+    <div class="container">
+        <h2>Alterar Registro</h2>
+        <p>Selecione a categoria e o id que deseja alterar</p>
+
+        <form class="search-form" id="search-form">
+            <div class="input-group">
+                <label for="tipo">Categorias</label>
+                <select id="tipo" required>
+                    <option value="produtos">Produtos</option>
+                    <option value="clientes">Clientes</option>
+                    <option value="vendas">Vendas</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="id">Id</label>
+                <input type="text" id="id" placeholder="ex: 1" required>
+            </div>
+
+            <button type="submit" class="btn-buscar">Buscar</button>
+
+            <div class="response" id="response-container">
+                <strong>Resultado:</strong>
+                <pre id="response-content"></pre>
+            </div>
+
+            <div id="edit-actions" style="display: none; margin-top: 10px;">
+                <button type="button" class="btn-alterar" onclick="salvarAlteracao()"
+                    style="background-color: #af6195;">
+                    Confirmar Alteração
+                </button>
+            </div>
+
+            <div class="footer-link">
+                <a href="main.html">Voltar ao inicio</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("search-form").addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const token = sessionStorage.getItem('token');
+            const tipo = document.getElementById("tipo").value;
+            const id = document.getElementById("id").value;
+
+            const responseContainer = document.getElementById("response-container");
+            const responseContent = document.getElementById("response-content");
+
+            try {
+                const response = await fetch(`http://localhost:8081/${tipo}/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    responseContainer.style.display = 'block';
+                    document.getElementById("edit-actions").style.display = 'block';
+
+                    window.currentEditingId = data.id;
+                    window.currentEditingTipo = tipo;
+
+                    if (tipo === "produtos") {
+                        responseContent.innerHTML = `
+                            <div class="edit-item">
+                                <label>Nome do Produto:</label>
+                                <input type="text" id="edit-nome" value="${data.nome}">
+                            </div>
+                            <div class="edit-item">
+                                <label>Preço de Venda(R$):</label>
+                                <input type="number" step="0.01" id="edit-preco" value="${data.preco}">
+                            </div>
+                            <div class="edit-item">
+                                <label>Estoque Atual(Qtd):</label>
+                                <input type="number" id="edit-quantidade" value="${data.quantidade}">
+                            </div>
+                        `;
+                    } else if (tipo === "clientes") {
+                        responseContent.innerHTML = `
+                            <label>Nome:</label>
+                            <input type="text" id="edit-nome" value="${data.nome}">
+                            <br>
+                            <label>Email:</label>
+                            <input type="email" id="edit-email" value="${data.email}">
+                        `;
+                    } else if (tipo === "vendas") {
+                        responseContent.innerHTML = `
+                            <p><strong>Venda #${data.id}</strong>(Só é possível alterar a descrição)</p>
+                            <label>Descrição:</label>
+                            <input type="text" id="edit-descr" value="${data.descricao}">
+                        `;
+                    }
+                } else {
+                    const message = await response.text();
+                    alert("Erro ao buscar:" + (message || "Registro não encontrado"));
+                    responseContainer.style.display = 'none';
+                }
+            } catch (error) {
+                console.error("Erro na conexão", error);
+                alert("Erro ao conectar com o servidor");
+            }
+        })
+
+        async function salvarAlteracao() {
+            const token = sessionStorage.getItem('token');
+            const tipo = window.currentEditingTipo;
+            const id = window.currentEditingId;
+
+            let bodyData = {};
+
+            if (tipo === "produtos") {
+                bodyData = {
+                    nome: document.getElementById("edit-nome").value,
+                    preco: parseFloat(document.getElementById("edit-preco").value),
+                    quantidade: parseInt(document.getElementById("edit-quantidade").value)
+                };
+            } else if (tipo === "clientes") {
+                bodyData = {
+                    nome: document.getElementById("edit-nome").value,
+                    email: document.getElementById("edit-email").value
+                };
+            } else if (tipo === "vendas") {
+                bodyData = {
+                    descricao: document.getElementById("edit-descr").value
+                };
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8081/${tipo}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyData)
+                });
+
+                if (response.ok) {
+                    alert("Atualizado com sucesso!");
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    console.log("Detalhes do erro de validação", errorData)
+                    alert("Erro ao atualizar registro:" + (errorData || "Verifique os campos informados"));
+                }
+            } catch (error) {
+                console.error("Erro:", error);
+            }
+        }
+    </script>
 </body>
+
 </html>

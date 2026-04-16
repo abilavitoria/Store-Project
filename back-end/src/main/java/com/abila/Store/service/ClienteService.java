@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class ClienteService {
     private final ClienteRepository clienteRepo;
 
-
+    @Transactional
     public ClienteResponse findById(Integer id){
         return clienteRepo.findById(id)
                 .map(ClienteResponse::new)
@@ -27,10 +27,7 @@ public class ClienteService {
         novoCliente.setNome(request.nome());
         novoCliente.setEmail(request.email());
         novoCliente.setTelefone(request.telefone());
-        novoCliente.setCpf(request.cpf());
-        novoCliente.setCnpj(request.cnpj());
-
-        Utils.validarDocumentos(novoCliente);
+        novoCliente.setDocumento(request.documento());
 
         Clientes salvo = clienteRepo.save(novoCliente);
         return new ClienteResponse(salvo);
@@ -51,14 +48,11 @@ public class ClienteService {
                    clientesExistentes.setNome(request.nome());
                    clientesExistentes.setEmail(request.email());
                    clientesExistentes.setTelefone(request.telefone());
-                   clientesExistentes.setCpf(request.cpf());
-                   clientesExistentes.setCnpj(request.cnpj());
-
-                   Utils.validarDocumentos(clientesExistentes);
+                   clientesExistentes.setDocumento(request.documento());
 
                     return new ClienteResponse(clienteRepo.save(clientesExistentes));
                })
-               .orElseThrow(()-> new RuntimeException("Cliente com id" + id + "não encontrado"));
+               .orElseThrow(()-> new RuntimeException("Cliente com id" + id + " não encontrado"));
     }
 
 }

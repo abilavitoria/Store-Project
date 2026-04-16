@@ -12,7 +12,7 @@ import java.util.List;
 
 public record VendaRequest(
         String descricao,
-        Clientes clientes,
-        List<ItemVendas> itens
+        Integer clienteId,
+        List<ItemVendaRequest> itens
 ) {
 }

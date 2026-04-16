@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 
 public record ItemVendaRequest(
-        @NotBlank String nome,
-        @Positive BigDecimal precoUnitario,
-        @Positive Integer quantidade
+        @NotNull Integer id,
+        @Positive Integer quantidade,
+        @NotNull Integer produtoId
 ) { }

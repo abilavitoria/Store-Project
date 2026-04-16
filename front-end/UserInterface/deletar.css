@@ -63,21 +63,20 @@ p {
     background-color: #fff;
 }
 
-.btn-salvar {
+.btn-deletar{
     width: 100%;
-    padding: 15px;
-    background-color: #d85c74; 
+    padding: 12px;
+    background-color: #d85c74;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
-    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: 0.3s;
     margin-top: 10px;
 }
 
-.btn-salvar:hover {
+.btn-deletar:hover{
     background-color: #b5465d;
 }
 
