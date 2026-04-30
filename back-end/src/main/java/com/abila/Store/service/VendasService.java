@@ -6,6 +6,7 @@ import com.abila.Store.domain.DTO.ItemVendaResponse;
 import com.abila.Store.domain.DTO.VendaRequest;
 import com.abila.Store.domain.DTO.VendaResponse;
 import com.abila.Store.domain.ItemVendas;
+import com.abila.Store.domain.Produtos;
 import com.abila.Store.domain.Vendas;
 import com.abila.Store.repository.ClienteRepository;
 import com.abila.Store.repository.ItemVendasRepository;
@@ -54,7 +55,14 @@ public class VendasService {
                 novoItem.setPrecoUnitario(produto.getPreco());
                 novoItem.setNome(produto.getNome());
 
-                novoItem.setQuantidade(produto.getQuantidade() - itemRequest.quantidade());
+                novoItem.setQuantidade(itemRequest.quantidade());
+
+                int estoqueAtualizado = produto.getQuantidade() - itemRequest.quantidade();
+                if(estoqueAtualizado < 0){
+                    throw new RuntimeException("Estoque insuficiente para o produto:" + produto.getNome());
+                }
+                produto.setQuantidade(estoqueAtualizado);
+
                 produtosRepo.save(produto);
 
                 novaVenda.getItens().add(novoItem);
@@ -78,6 +86,12 @@ public class VendasService {
     public VendaResponse updateVendas(VendaRequest request, Integer id){
         return vendasRepo.findById(id)
                 .map(vendasExistentes -> {
+                    vendasExistentes.getItens().forEach(itemAntigo ->{
+                        Produtos produto = itemAntigo.getProduto();
+                        produto.setQuantidade(produto.getQuantidade() + itemAntigo.getQuantidade());
+                        produtosRepo.save(produto);
+                    });
+
                     vendasExistentes.setDescricao(request.descricao());
 
                     Clientes cliente = clienteRepo.findById(request.clienteId())
@@ -98,12 +112,15 @@ public class VendasService {
                             novoItem.setPrecoUnitario(produto.getPreco());
                             novoItem.setNome(produto.getNome());
 
+                            produto.setQuantidade(produto.getQuantidade() - itemDTO.quantidade());
+                            produtosRepo.save(produto);
+
                             vendasExistentes.getItens().add(novoItem);
                         });
                     }
                     vendasExistentes.totalVenda();
-
                     return new VendaResponse(vendasRepo.save(vendasExistentes));
+                    
                 })
                 .orElseThrow(()-> new RuntimeException("Venda com o id" + id + "não encontrada"));
     }
